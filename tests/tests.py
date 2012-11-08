@@ -14,7 +14,9 @@ class EmailMessageTest(unittest.TestCase):
     def test_simple_body(self):
         message = self.get_email('email_1_1')
 
-        self.assertEquals(3, len(message.fragments))
+        self.assertEquals(2, len(message.fragments))
+        self.assertEquals([True, False], map(lambda x: x, [f.signature for f in message.fragments]))
+        self.assertEquals([True, False], map(lambda x: x, [f.hidden for f in message.fragments]))
 
     @unittest.skip("")
     def test_multiline_reply_headers(self):

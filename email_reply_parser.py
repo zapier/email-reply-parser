@@ -55,11 +55,6 @@ class EmailMessage():
 
         self._finish_fragment()
 
-        for f in self.fragments:
-            print "================== begin fragment =================="
-            print f.content
-            print "================== end fragment =================="
-
         return self
 
     def _scan_line(self, line):
