@@ -70,15 +70,14 @@ class EmailMessage():
             line.lstrip()
 
         is_quoted = re.match('(>+)', line) != None
-        #print "is_quoted is %s" % is_quoted
 
-        if self.fragment and not line:
+        if self.fragment and len(line.strip()) == 0:
             if re.match(self.SIG_REGEX, self.fragment.lines[-1]):
                 self.fragment.signature = True
                 self._finish_fragment()
 
         if self.fragment and ((self.fragment.quoted == is_quoted)
-            or (self.fragment.quoted and (self.quote_header(line) or not line))):
+            or (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
             self.fragment.lines.append(line)
         else:
             self._finish_fragment()
@@ -95,8 +94,7 @@ class EmailMessage():
                     self.fragment.hidden = True
                 else:
                     self.found_visible = True
-            else:
-                self.fragments.append(self.fragment)
+            self.fragments.append(self.fragment)
         self.fragment = None
 
 

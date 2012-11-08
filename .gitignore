@@ -1,3 +1,4 @@
 .project
 *.pyc
 tests/*.pyc
+.pydevproject

@@ -22,7 +22,6 @@ class EmailMessageTest(unittest.TestCase):
 
         self.assertIn('I get', message.read().text)
         self.assertRegexpMatches('^On', str(message.text))
-        #self.assertRegexpMatches('Was this', message.fragments[1].block)
 
     def get_email(self, name):
         """ Return EmailMessage instance
