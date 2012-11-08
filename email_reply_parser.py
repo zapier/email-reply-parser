@@ -25,7 +25,7 @@ class EmailReplyParser():
 
 
 class EmailMessage():
-    """ An email message represents a parsed email body string.
+    """ An email message represents a parsed email body.
     """
 
     SIG_REGEX = '(--|__|\w-$)|(^(\w+\s*){1,3} #{"Sent from my".reverse})'
@@ -54,6 +54,8 @@ class EmailMessage():
             self._scan_line(line)
 
         self._finish_fragment()
+
+        self.fragments.reverse()
 
         return self
 
@@ -105,6 +107,7 @@ class Fragment():
         self.lines = [first_line]
 
     def finish(self):
+        self.lines.reverse()
         self.content = '\n'.join(self.lines)
         self.lines = None
 
