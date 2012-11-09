@@ -52,6 +52,13 @@ class EmailMessageTest(unittest.TestCase):
         self.assertIn('I get', message.read().text)
         self.assertRegexpMatches('^On', str(message.text))
 
+    def test_captures_date_string(self):
+        message = self.get_email('email_1_4')
+
+        self.assertTrue('Awesome' in message.fragments[0].content)
+        self.assertTrue('On' in message.fragments[1].content)
+        self.assertTrue('Loader' in message.fragments[1].content)
+
     def get_email(self, name):
         """ Return EmailMessage instance
         """
