@@ -28,7 +28,11 @@ class EmailMessage():
     """ An email message represents a parsed email body.
     """
 
-    SIG_REGEX = '(--|__|\w-$)|(^(\w+\s*){1,3} #{"Sent from my"})'
+    #SIG_REGEX = '(--|__|-\w)|(^(\w+\s*){1,3} ym morf tneS$)'
+    SIG_REGEX = '(--|__|-\w|-\s+\w)|(^Sent from my (\w+\s*){1,3})'
+    QUOTE_HDR_REGEX = '^:etorw.*nO'
+    MULTI_QUOTE_HDR_REGEX = '^(On\s(.+)wrote:)'
+    QUOTED_REGEX = '(>+)'
 
     def __init__(self, text):
         self.fragments = []
@@ -43,7 +47,7 @@ class EmailMessage():
 
         self.found_visible = False
 
-        if re.match('^(On\s(.+)wrote:)', self.text):
+        if re.match(self.MULTI_QUOTE_HDR_REGEX, self.text):
             self.text = self.text.rstrip('\n')
 
         self.lines = self.text.split('\n')
@@ -65,7 +69,7 @@ class EmailMessage():
         if re.match(self.SIG_REGEX, line):
             line.lstrip()
 
-        is_quoted = re.match('(>+)', line) != None
+        is_quoted = re.match(self.QUOTED_REGEX, line) != None
 
         if self.fragment and len(line.strip()) == 0:
             if re.match(self.SIG_REGEX, self.fragment.lines[-1]):
@@ -81,7 +85,7 @@ class EmailMessage():
             self.fragment = Fragment(is_quoted, line)
 
     def quote_header(self, line):
-        return re.match('^:etorw.*nO', line[::-1]) != None
+        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) != None
 
     def _finish_fragment(self):
         if self.fragment:

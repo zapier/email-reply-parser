@@ -14,13 +14,13 @@ class EmailMessageTest(unittest.TestCase):
     def test_simple_body(self):
         message = self.get_email('email_1_1')
 
-        self.assertEquals(2, len(message.fragments))
-        self.assertEquals([False, True],
+        self.assertEquals(3, len(message.fragments))
+        self.assertEquals([False, True, True],
             map(lambda x: x, [f.signature for f in message.fragments]))
-        self.assertEquals([False, True],
+        self.assertEquals([False, True, True],
             map(lambda x: x, [f.hidden for f in message.fragments]))
         self.assertTrue("folks" in message.fragments[0].content)
-        self.assertTrue("riak-users" in message.fragments[1].content)
+        self.assertTrue("riak-users" in message.fragments[2].content)
 
     def test_reads_bottom_message(self):
         message = self.get_email('email_1_2')
@@ -42,11 +42,6 @@ class EmailMessageTest(unittest.TestCase):
 
     def test_reads_top_post(self):
         message = self.get_email('email_1_3')
-
-        for f in message.fragments:
-            print '======= begin fragment ======='
-            print f.content
-            print '======= end fragment ======='
 
         self.assertEquals(5, len(message.fragments))
 
