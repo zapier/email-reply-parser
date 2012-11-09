@@ -28,7 +28,7 @@ class EmailMessage():
     """ An email message represents a parsed email body.
     """
 
-    SIG_REGEX = '(--|__|-\w|-\s+\w)|(^Sent from my (\w+\s*){1,3})'
+    SIG_REGEX = '(--|__|-\w)|(^Sent from my (\w+\s*){1,3})'
     QUOTE_HDR_REGEX = '^:etorw.*nO'
     MULTI_QUOTE_HDR_REGEX = '^(On\s(.+)wrote:)'
     QUOTED_REGEX = '(>+)'

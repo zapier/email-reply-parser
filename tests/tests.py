@@ -59,6 +59,29 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue('On' in message.fragments[1].content)
         self.assertTrue('Loader' in message.fragments[1].content)
 
+    def test_complex_body_with_one_fragment(self):
+        message = self.get_email('email_1_5')
+
+        self.assertEquals(1, len(message.fragments))
+
+    def test_verify_reads_signature_correct(self):
+        message = self.get_email('correct_sig')
+        self.assertEquals(2, len(message.fragments))
+
+        self.assertEquals([False, False],
+            map(lambda x: x, [f.quoted for f in message.fragments]))
+
+        self.assertEquals([False, True],
+            map(lambda x: x, [f.signature for f in message.fragments]))
+
+        self.assertEquals([False, True],
+            map(lambda x: x, [f.hidden for f in message.fragments]))
+
+        self.assertTrue('--' in message.fragments[1].content)
+
+
+
+
     def get_email(self, name):
         """ Return EmailMessage instance
         """
