@@ -33,7 +33,8 @@ class EmailMessage():
     def __init__(self, text):
         self.fragments = []
         self.fragment = None
-        self.text = text
+        self.text = text.replace('\r\n', '\n')
+        self.found_visible = False
 
     def read(self):
         """ Creates new fragment for each line
@@ -41,8 +42,6 @@ class EmailMessage():
         """
 
         self.found_visible = False
-
-        self.text = self.text.replace('\r\n', '\n')
 
         if re.match('^(On\s(.+)wrote:)', self.text):
             self.text = self.text.rstrip('\n')
@@ -87,7 +86,10 @@ class EmailMessage():
         if self.fragment:
             self.fragment.finish()
             if not self.found_visible:
-                if self.fragment.quoted or self.fragment.signature or not self.fragment.content:
+                if self.fragment.quoted \
+                or self.fragment.signature \
+                or (len(self.fragment.content.strip()) == 0):
+
                     self.fragment.hidden = True
                 else:
                     self.found_visible = True
@@ -114,6 +116,3 @@ class Fragment():
     @property
     def content(self):
         return self.content
-
-    def inspect(self):
-        pass
