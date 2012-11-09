@@ -33,17 +33,20 @@ class EmailMessageTest(unittest.TestCase):
         self.assertEquals([False, False, False, False, False, True],
             map(lambda x: x, [f.signature for f in message.fragments]))
 
-        """
+        
         for f in message.fragments:
             print "\n ======== begin fragment ========"
             print f.content
             print f.hidden
             print "======== end fragment ======== \n"
 
-        """
+        
 
         self.assertEquals([False, False, False, True, True, True],
             map(lambda x: x, [f.hidden for f in message.fragments]))
+
+        self.assertTrue("Hi," in message.fragments[0].content)
+        self.assertTrue("Hi," in message.fragments[0].content)
 
     @unittest.skip("")
     def test_multiline_reply_headers(self):

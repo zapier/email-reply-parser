@@ -74,13 +74,14 @@ class EmailMessage():
 
         if self.fragment and ((self.fragment.quoted == is_quoted)
             or (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
+
             self.fragment.lines.append(line)
         else:
             self._finish_fragment()
             self.fragment = Fragment(is_quoted, line)
 
     def quote_header(self, line):
-        return re.match('^:etorw.*nO', line) != None
+        return re.match('^:etorw.*nO', line[::-1]) != None
 
     def _finish_fragment(self):
         if self.fragment:
