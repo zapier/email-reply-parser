@@ -11,7 +11,6 @@ class EmailMessageTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @unittest.skip("")
     def test_simple_body(self):
         message = self.get_email('email_1_1')
 
@@ -33,20 +32,23 @@ class EmailMessageTest(unittest.TestCase):
         self.assertEquals([False, False, False, False, False, True],
             map(lambda x: x, [f.signature for f in message.fragments]))
 
-        
-        for f in message.fragments:
-            print "\n ======== begin fragment ========"
-            print f.content
-            print f.hidden
-            print "======== end fragment ======== \n"
-
-        
-
         self.assertEquals([False, False, False, True, True, True],
             map(lambda x: x, [f.hidden for f in message.fragments]))
 
         self.assertTrue("Hi," in message.fragments[0].content)
-        self.assertTrue("Hi," in message.fragments[0].content)
+        self.assertTrue("On" in message.fragments[1].content)
+        self.assertTrue(">" in message.fragments[3].content)
+        self.assertTrue("riak-users" in message.fragments[5].content)
+
+    def test_reads_top_post(self):
+        message = self.get_email('email_1_3')
+
+        for f in message.fragments:
+            print '======= begin fragment ======='
+            print f.content
+            print '======= end fragment ======='
+
+        self.assertEquals(5, len(message.fragments))
 
     @unittest.skip("")
     def test_multiline_reply_headers(self):

@@ -28,7 +28,7 @@ class EmailMessage():
     """ An email message represents a parsed email body.
     """
 
-    SIG_REGEX = '(--|__|\w-$)|(^(\w+\s*){1,3} #{"Sent from my".reverse})'
+    SIG_REGEX = '(--|__|\w-$)|(^(\w+\s*){1,3} #{"Sent from my"})'
 
     def __init__(self, text):
         self.fragments = []
