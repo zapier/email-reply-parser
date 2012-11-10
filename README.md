@@ -1,10 +1,10 @@
-# Email Replay Parser for Python
+# Ported Email Replay Parser for Python
 
-Email Reply Parser is a python library that breaks an email into subject, body, and signature fragments.
-
-## Example Use Cases
+Email Reply Parser is a port of GitHub's Email Reply Parser, making it easy to break an email into fragments.
 
 ## Installation
+
+
 
 ## Known Issues
 
