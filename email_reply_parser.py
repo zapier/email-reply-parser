@@ -69,9 +69,9 @@ class EmailMessage():
     def reply(self):
         reply = []
         for f in self.fragments:
-            if not f.hidden:
+            if not (f.hidden or f.quoted):
                 reply.append(f.content)
-        return reply.join('\n')
+        return '\n'.join(reply)
 
     def _scan_line(self, line):
 
