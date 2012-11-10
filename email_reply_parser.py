@@ -21,7 +21,7 @@ class EmailReplyParser():
 
     @staticmethod
     def parse_reply(text):
-        pass
+        return EmailReplyParser.read(text).reply
 
 
 class EmailMessage():
@@ -46,13 +46,12 @@ class EmailMessage():
 
         self.found_visible = False
 
-        is_multi_quote_header = re.search(self.MULTI_QUOTE_HDR_REGEX, self.text,\
-                                    re.IGNORECASE | re.DOTALL)
+        is_multi_quote_header = re.search(self.MULTI_QUOTE_HDR_REGEX, self.text, re.MULTILINE | re.DOTALL)
         if is_multi_quote_header:
             self.text = re.sub(self.MULTI_QUOTE_HDR_REGEX, \
                 is_multi_quote_header.groups()[0].replace('\n', ''), \
                 self.text, \
-                flags=re.IGNORECASE | re.DOTALL)
+                flags=re.DOTALL)
 
         self.lines = self.text.split('\n')
         self.lines.reverse()
@@ -65,6 +64,14 @@ class EmailMessage():
         self.fragments.reverse()
 
         return self
+
+    @property
+    def reply(self):
+        reply = []
+        for f in self.fragments:
+            if not f.hidden:
+                reply.append(f.content)
+        return reply.join('\n')
 
     def _scan_line(self, line):
 
