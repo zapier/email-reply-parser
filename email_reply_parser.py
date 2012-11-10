@@ -28,10 +28,10 @@ class EmailMessage():
     """ An email message represents a parsed email body.
     """
 
-    SIG_REGEX = '(--|__|-\w)|(^Sent from my (\w+\s*){1,3})'
-    QUOTE_HDR_REGEX = '^:etorw.*nO'
-    MULTI_QUOTE_HDR_REGEX = '^(On\s(.+)wrote:)'
-    QUOTED_REGEX = '(>+)'
+    SIG_REGEX = r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})'
+    QUOTE_HDR_REGEX = r'^:etorw.*nO'
+    MULTI_QUOTE_HDR_REGEX = r'(On\s.*?wrote:)'
+    QUOTED_REGEX = r'(>+)'
 
     def __init__(self, text):
         self.fragments = []
@@ -46,8 +46,13 @@ class EmailMessage():
 
         self.found_visible = False
 
-        if re.match(self.MULTI_QUOTE_HDR_REGEX, self.text):
-            self.text = self.text.rstrip('\n')
+        is_multi_quote_header = re.search(self.MULTI_QUOTE_HDR_REGEX, self.text,\
+                                    re.IGNORECASE | re.DOTALL)
+        if is_multi_quote_header:
+            self.text = re.sub(self.MULTI_QUOTE_HDR_REGEX, \
+                is_multi_quote_header.groups()[0].replace('\n', ''), \
+                self.text, \
+                flags=re.IGNORECASE | re.DOTALL)
 
         self.lines = self.text.split('\n')
         self.lines.reverse()
@@ -102,7 +107,8 @@ class EmailMessage():
 
 
 class Fragment():
-    """
+    """ A Fragment is a part of
+        an Email Message, labeling each part.
     """
 
     def __init__(self, quoted, first_line):
