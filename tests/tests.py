@@ -5,7 +5,6 @@ from email_reply_parser import EmailReplyParser
 
 class EmailMessageTest(unittest.TestCase):
 
-    @unittest.skip("")
     def test_simple_body(self):
         message = self.get_email('email_1_1')
 
@@ -17,7 +16,6 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue("folks" in message.fragments[0].content)
         self.assertTrue("riak-users" in message.fragments[2].content)
 
-    @unittest.skip("")
     def test_reads_bottom_message(self):
         message = self.get_email('email_1_2')
 
@@ -36,19 +34,16 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue(">" in message.fragments[3].content)
         self.assertTrue("riak-users" in message.fragments[5].content)
 
-    @unittest.skip("")
     def test_reads_top_post(self):
         message = self.get_email('email_1_3')
 
         self.assertEquals(5, len(message.fragments))
 
-    @unittest.skip("")
     def test_multiline_reply_headers(self):
         message = self.get_email('email_1_6')
         self.assertIn('I get', message.fragments[0].content)
         self.assertRegexpMatches(message.fragments[1].content, 'On')
 
-    @unittest.skip("")
     def test_captures_date_string(self):
         message = self.get_email('email_1_4')
 
@@ -56,13 +51,11 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue('On' in message.fragments[1].content)
         self.assertTrue('Loader' in message.fragments[1].content)
 
-    @unittest.skip("")
     def test_complex_body_with_one_fragment(self):
         message = self.get_email('email_1_5')
 
         self.assertEquals(1, len(message.fragments))
 
-    @unittest.skip("")
     def test_verify_reads_signature_correct(self):
         message = self.get_email('correct_sig')
         self.assertEquals(2, len(message.fragments))
@@ -78,7 +71,6 @@ class EmailMessageTest(unittest.TestCase):
 
         self.assertTrue('--' in message.fragments[1].content)
 
-    @unittest.skip("")
     def test_deals_with_windows_line_endings(self):
         msg = self.get_email('email_1_7')
 
@@ -86,10 +78,17 @@ class EmailMessageTest(unittest.TestCase):
         self.assertRegexpMatches(msg.fragments[1].content, 'On')
         self.assertRegexpMatches(msg.fragments[1].content, 'Steps 0-2')
 
-    #@unittest.skip("")
-    def test_reply_parsed(self):
+    def test_reply_is_parsed(self):
         message = self.get_email('email_1_2')
-        print message.reply
+        self.assertTrue("You can list the keys for the bucket" in message.reply)
+
+    def test_sent_from_iphone(self):
+        with open('emails/email_iPhone.txt') as email:
+            self.assertTrue("Sent from my iPhone" not in EmailReplyParser.parse_reply(email.read()))
+
+    def test_email_one_is_not_on(self):
+        with open('emails/email_one_is_not_on.txt') as email:
+            self.assertTrue("On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
 
     def get_email(self, name):
         """ Return EmailMessage instance
