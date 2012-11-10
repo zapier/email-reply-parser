@@ -6,7 +6,7 @@ import re
 
 
 class EmailReplyParser():
-    """
+    """ Represents a email message that is parsed.
     """
 
     @staticmethod
@@ -21,6 +21,12 @@ class EmailReplyParser():
 
     @staticmethod
     def parse_reply(text):
+        """ Provides the reply portion of email.
+
+            text - A string email body
+
+            Returns reply body message
+        """
         return EmailReplyParser.read(text).reply
 
 
@@ -42,6 +48,8 @@ class EmailMessage():
     def read(self):
         """ Creates new fragment for each line
             and labels as a signature, quote, or hidden.
+
+            Returns EmailMessage instance
         """
 
         self.found_visible = False
@@ -67,6 +75,8 @@ class EmailMessage():
 
     @property
     def reply(self):
+        """ Captures reply message within email
+        """
         reply = []
         for f in self.fragments:
             if not (f.hidden or f.quoted):
@@ -74,6 +84,10 @@ class EmailMessage():
         return '\n'.join(reply)
 
     def _scan_line(self, line):
+        """ Reviews each line in email message and determines fragment type
+
+            line - a row of text from an email message
+        """
 
         line.strip('\n')
 
@@ -96,9 +110,18 @@ class EmailMessage():
             self.fragment = Fragment(is_quoted, line)
 
     def quote_header(self, line):
+        """ Determines whether line is part of a quoted area
+
+            line - a row of the email message
+
+            Returns True or False
+        """
         return re.match(self.QUOTE_HDR_REGEX, line[::-1]) != None
 
     def _finish_fragment(self):
+        """ Creates fragment
+        """
+
         if self.fragment:
             self.fragment.finish()
             if not self.found_visible:
@@ -126,6 +149,9 @@ class Fragment():
         self.lines = [first_line]
 
     def finish(self):
+        """ Creates block of content with lines
+            belonging to fragment.
+        """
         self.lines.reverse()
         self.content = '\n'.join(self.lines)
         self.lines = None

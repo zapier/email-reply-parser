@@ -1,19 +1,26 @@
-# Ported Email Replay Parser for Python
+# Email Reply Parser for Python
 
-Email Reply Parser is a port of GitHub's Email Reply Parser, making it easy to break an email into fragments.
+## Summary
+
+Email Reply Parser is a port of GitHub's Email Reply Parser library, making it easy to fragment email.
 
 ## Installation
 
+Using pip, use command:
+
+pip install email_reply_parser
+
+## Usage
+
+To use email_reply_parser, 
+
+from email_reply_parser import EmailReplyParser
 
 
-## Known Issues
-
-## Author
+EmailReplyParser.read(text)
 
 
+## Tutorial
 
-## TODO
 
-- Post to Travis CI
-- Create Test Cases
-- Fix the issue 
+
