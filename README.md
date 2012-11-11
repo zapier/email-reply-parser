@@ -1,6 +1,6 @@
 # Email Reply Parser for Python
 
-[![Build Status](https://secure.travis-ci.org/zapier/django-drip.png)](http://travis-ci.org/zapier/email_reply_parser)
+[![Build Status]()](http://travis-ci.org/zapier/email_reply_parser)
 
 ## Summary
 
