@@ -5,4 +5,6 @@ tests/*.pyc
 .DS_Store
 *.egg-info
 .project
+dist/
+dist/*
 
