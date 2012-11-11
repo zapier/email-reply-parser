@@ -1,6 +1,7 @@
 .project
 *.pyc
 tests/*.pyc
+tests/.DS_Store
 .pydevproject
 .DS_Store
 *.egg-info
