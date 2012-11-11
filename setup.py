@@ -10,8 +10,8 @@ with open('LICENSE') as f:
 
 setup(
     name='email_reply_parser',
-    version='0.1.0',
-    description='Port of GitHub\'s Email Reply Parser',
+    version='0.1.1',
+    description='A email parser library, making it easy to extract a signature, reply, or quote block from a text-formatted email.',
     long_description=readme,
     author='Royce Haynes',
     author_email='royce.haynes@gmail.com',
