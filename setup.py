@@ -17,5 +17,6 @@ setup(
     author_email='royce.haynes@gmail.com',
     url='https://github.com/zapier/email-reply-parser',
     license=license,
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests')),
+    test_suite='tests.test_email_message'
 )

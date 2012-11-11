@@ -83,17 +83,17 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue("You can list the keys for the bucket" in message.reply)
 
     def test_sent_from_iphone(self):
-        with open('emails/email_iPhone.txt') as email:
+        with open('tests/emails/email_iPhone.txt') as email:
             self.assertTrue("Sent from my iPhone" not in EmailReplyParser.parse_reply(email.read()))
 
     def test_email_one_is_not_on(self):
-        with open('emails/email_one_is_not_on.txt') as email:
+        with open('tests/emails/email_one_is_not_on.txt') as email:
             self.assertTrue("On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
 
     def get_email(self, name):
         """ Return EmailMessage instance
         """
-        text = open('emails/%s.txt' % name).read()
+        text = open('tests/emails/%s.txt' % name).read()
         return EmailReplyParser.read(text)
 
 
