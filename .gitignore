@@ -2,5 +2,7 @@
 *.pyc
 tests/*.pyc
 .pydevproject
+.DS_Store
 *.egg-info
+.project
 
