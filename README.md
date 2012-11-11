@@ -1,7 +1,5 @@
 # Email Reply Parser for Python
 
-[![Build Status]()](http://travis-ci.org/zapier/email_reply_parser)
-
 ## Summary
 
 Email Reply Parser is a port of GitHub's Email Reply Parser library, making it easy to fragment email.

@@ -1,7 +1,7 @@
 import re
 
 """
-    Email Reply Parser description
+    Email Reply Parser is a port of GitHub's Email Reply Parser for Python.
 """
 
 
