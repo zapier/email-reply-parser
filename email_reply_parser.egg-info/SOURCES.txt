@@ -1,8 +1,0 @@
-setup.py
-email_reply_parser.egg-info/PKG-INFO
-email_reply_parser.egg-info/SOURCES.txt
-email_reply_parser.egg-info/dependency_links.txt
-email_reply_parser.egg-info/top_level.txt
-tests/__init__.py
-tests/context.py
-tests/test_email_message.py

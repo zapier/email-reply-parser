@@ -2,3 +2,5 @@
 *.pyc
 tests/*.pyc
 .pydevproject
+*.egg-info
+
