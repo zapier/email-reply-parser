@@ -7,4 +7,5 @@ tests/*.pyc
 .project
 dist/
 dist/*
+.pypirc
 
