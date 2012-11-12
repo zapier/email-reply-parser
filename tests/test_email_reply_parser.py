@@ -1,6 +1,6 @@
 import unittest
-from context import email_reply_parser
-from email_reply_parser import EmailReplyParser
+import email_reply_parser
+from email_reply_parser.email_reply_parser import EmailReplyParser
 
 
 class EmailMessageTest(unittest.TestCase):
