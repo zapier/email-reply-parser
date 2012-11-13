@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
 import os
+import sys
 
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'email_reply_parser'))
+import version
 
 setup(
     name='email_reply_parser',
-    version='0.1.5',
-    description='A email parser library, making it easy to extract a signature, reply, or quote block from a text-formatted email.',
-    packages=find_packages('email_reply_parser', 'tests'),
-    long_description=read('README.md'),
+    version=version.VERSION,
+    description='Email reply parser',
+    packages=['email_reply_parser'],
+    package_data={'email_reply_parser': ['../VERSION']},
     author='Royce Haynes',
     author_email='royce.haynes@gmail.com',
     url='https://github.com/zapier/email-reply-parser',
-    license=read('LICENSE'),
-    test_suite='tests.test_email_reply_parser'
+    license='MIT',
+    test_suite='test'
 )
