@@ -10,7 +10,9 @@ Email Reply Parser is a port of GitHub's Email Reply Parser library, making it e
 
 Using pip, use command:
 
+```
 pip install email_reply_parser
+```
 
 ## Tutorial
 
@@ -18,20 +20,28 @@ pip install email_reply_parser
 
 Step 1: Import email reply parser package
 
+```python
 from email_reply_parser import EmailReplyParser
+```
 
 Step 2: Provide email message as type String
 
+```python
 EmailReplyParser.read(email_message)
+```
 
 ### How to only retrieve the reply message
 
 Step 1: Import email reply parser package
 
+```python
 from email_reply_parser import EmailReplyParser
+```
 
 Step 2: Provide email message as type string using parse_reply class method.
 
+```python
 EmailReplyParser.parse_reply(email_message)
+```
 
 
