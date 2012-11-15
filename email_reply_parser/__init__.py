@@ -1,5 +1,4 @@
 import re
-import email_reply_parser
 
 """
     email_reply_parser is a python library port of GitHub's Email Reply Parser.
@@ -7,17 +6,13 @@ import email_reply_parser
     For more information, visit https://github.com/zapier/email-reply-parser
 """
 
-#: PEP 396
-__version__ = "0.1.8"
-version_info = (0, 1, 8)
 
-
-class EmailReplyParser():
+class EmailReplyParser(object):
     """ Represents a email message that is parsed.
     """
 
-    @classmethod
-    def read(cls, text):
+    @staticmethod
+    def read(text):
         """ Factory method that splits email into list of fragments
 
             text - A string email body
@@ -26,8 +21,8 @@ class EmailReplyParser():
         """
         return EmailMessage(text).read()
 
-    @classmethod
-    def parse_reply(cls, text):
+    @staticmethod
+    def parse_reply(text):
         """ Provides the reply portion of email.
 
             text - A string email body
@@ -37,7 +32,7 @@ class EmailReplyParser():
         return EmailReplyParser.read(text).reply
 
 
-class EmailMessage():
+class EmailMessage(object):
     """ An email message represents a parsed email body.
     """
 
@@ -143,7 +138,7 @@ class EmailMessage():
         self.fragment = None
 
 
-class Fragment():
+class Fragment(object):
     """ A Fragment is a part of
         an Email Message, labeling each part.
     """
@@ -152,7 +147,7 @@ class Fragment():
         self.signature = False
         self.hidden = False
         self.quoted = quoted
-        self.content = None
+        self._content = None
         self.lines = [first_line]
 
     def finish(self):
@@ -160,9 +155,9 @@ class Fragment():
             belonging to fragment.
         """
         self.lines.reverse()
-        self.content = '\n'.join(self.lines)
+        self._content = '\n'.join(self.lines)
         self.lines = None
 
     @property
     def content(self):
-        return self.content
+        return self._content
