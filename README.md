@@ -1,8 +1,26 @@
 # Email Reply Parser for Python
+(a port of GitHub's Email Reply Parser library)
 
 ## Summary
 
-Email Reply Parser is a port of GitHub's Email Reply Parser library, making it easy to fragment email.
+Email Reply Parser makes it easy to grab *only* the last reply to an on-going email thread.
+
+Say you'd like to parse out a user's response to your transaction email messages:
+
+```
+Yes that is fine, I will email you in the morning.
+
+On Fri, Nov 16, 2012 at 1:48 PM, Zapier <contact@zapier.com> wrote:
+
+> Our support team just commented on your open Ticket:
+> "Hi Royce, can we chat in the morning about your question?"
+```
+
+Email clients handle reply formatting differently, making parsing a pain. [We include tests for many cases](https://github.com/zapier/email-reply-parser/tree/master/test/emails). The parsed email:
+
+```
+Yes that is fine, I will email you in the morning.
+```
 
 [![Build Status](https://secure.travis-ci.org/zapier/email-reply-parser.png?branch=master)](https://travis-ci.org/zapier/email-reply-parser)
 
