@@ -58,10 +58,10 @@ class EmailMessage(object):
 
         is_multi_quote_header = re.search(self.MULTI_QUOTE_HDR_REGEX, self.text, re.MULTILINE | re.DOTALL)
         if is_multi_quote_header:
-            self.text = re.sub(self.MULTI_QUOTE_HDR_REGEX, \
-                is_multi_quote_header.groups()[0].replace('\n', ''), \
-                self.text, \
-                flags=re.DOTALL)
+            expr = re.compile(self.MULTI_QUOTE_HDR_REGEX, flags=re.DOTALL)
+            self.text = expr.sub(
+                is_multi_quote_header.groups()[0].replace('\n', ''),
+                self.text)
 
         self.lines = self.text.split('\n')
         self.lines.reverse()
