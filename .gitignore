@@ -8,4 +8,5 @@ tests/.DS_Store
 .project
 dist/
 dist/*
+*.swp
 
