@@ -37,7 +37,6 @@ class EmailMessage(object):
     """
 
     SIG_REGEX = r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})'
-    QUOTE_HDR_REGEX = r'^:etorw.*nO'
     MULTI_QUOTE_HDR_REGEX = r'(On\s.*?wrote:)'
     QUOTED_REGEX = r'(>+)'
 
@@ -96,16 +95,16 @@ class EmailMessage(object):
         if re.match(self.SIG_REGEX, line):
             line.lstrip()
 
-        is_quoted = re.match(self.QUOTED_REGEX, line) != None
+        is_quoted = True if re.match(self.QUOTED_REGEX, line) else False
 
         if self.fragment and len(line.strip()) == 0:
             if re.match(self.SIG_REGEX, self.fragment.lines[-1]):
                 self.fragment.signature = True
                 self._finish_fragment()
 
-        if self.fragment and ((self.fragment.quoted == is_quoted)
-            or (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
-
+        if self.fragment and ((self.fragment.quoted == is_quoted) or
+                              (self.fragment.quoted and (self.quote_header(line) or
+                                                         len(line.strip()) == 0))):
             self.fragment.lines.append(line)
         else:
             self._finish_fragment()
@@ -118,7 +117,7 @@ class EmailMessage(object):
 
             Returns True or False
         """
-        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) != None
+        return True if re.match(self.MULTI_QUOTE_HDR_REGEX, line) else False
 
     def _finish_fragment(self):
         """ Creates fragment
@@ -127,9 +126,9 @@ class EmailMessage(object):
         if self.fragment:
             self.fragment.finish()
             if not self.found_visible:
-                if self.fragment.quoted \
-                or self.fragment.signature \
-                or (len(self.fragment.content.strip()) == 0):
+                if self.fragment.quoted or \
+                   self.fragment.signature or \
+                   (len(self.fragment.content.strip()) == 0):
 
                     self.fragment.hidden = True
                 else:
