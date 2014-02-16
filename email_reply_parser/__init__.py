@@ -40,7 +40,7 @@ class EmailMessage(object):
     QUOTE_HDR_REGEX = r'^:etorw.*nO'
     MULTI_QUOTE_HDR_REGEX = r'(On\s.*?wrote:)'
     QUOTED_REGEX = r'(>+)'
-    FROM_SUBJ_TO_DATE = r'^(?:From|Subject|To|Date):\s'
+    FROM_SUBJ_TO_DATE = r'^\s*(?:From|Subject|Sent|To|Date):\s'
 
     def __init__(self, text):
         self.fragments = []
