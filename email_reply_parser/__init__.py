@@ -41,6 +41,7 @@ class EmailMessage(object):
     MULTI_QUOTE_HDR_REGEX = r'(On\s.*?wrote:)'
     QUOTED_REGEX = r'(>+)'
     FROM_SUBJ_TO_DATE = r'^\s*(?:From|Subject|Sent|To|Date):\s'
+    INLINE_WROTE = r'.+\s+<\S+@\S+>\s+wrote:$'
 
     def __init__(self, text):
         self.fragments = []
@@ -66,9 +67,10 @@ class EmailMessage(object):
 
         self.lines = self.text.split('\n')
         for i in range(len(self.lines)-3):
-            if re.match(self.FROM_SUBJ_TO_DATE, self.lines[i]) and \
-               re.match(self.FROM_SUBJ_TO_DATE, self.lines[i+1]) and \
-               re.match(self.FROM_SUBJ_TO_DATE, self.lines[i+2]):
+            if re.match(self.INLINE_WROTE, self.lines[i]) or \
+               (re.match(self.FROM_SUBJ_TO_DATE, self.lines[i]) and \
+                re.match(self.FROM_SUBJ_TO_DATE, self.lines[i+1]) and \
+                re.match(self.FROM_SUBJ_TO_DATE, self.lines[i+2])):
                   self.lines = self.lines[:i] + ['> ' + l for l in self.lines[i:]]
                   break
 

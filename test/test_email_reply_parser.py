@@ -101,6 +101,10 @@ class EmailMessageTest(unittest.TestCase):
         with open('test/emails/email_anglebrackets_stripped_2.txt') as email:
             self.assertTrue("Hi Luisa" not in EmailReplyParser.parse_reply(email.read()))
 
+    def test_inline_wrote(self):
+        with open('test/emails/email_inline_wrote.txt') as email:
+            self.assertTrue("Hi Adrian," not in EmailReplyParser.parse_reply(email.read()))
+
     def get_email(self, name):
         """ Return EmailMessage instance
         """
