@@ -96,7 +96,8 @@ class EmailMessageTest(unittest.TestCase):
     def get_email(self, name):
         """ Return EmailMessage instance
         """
-        text = open('test/emails/%s.txt' % name).read()
+        with open('test/emails/%s.txt' % name) as f:
+            text = f.read()
         return EmailReplyParser.read(text)
 
 
