@@ -13,9 +13,9 @@ class EmailMessageTest(unittest.TestCase):
 
         self.assertEqual(3, len(message.fragments))
         self.assertEqual([False, True, True],
-            map(lambda x: x, [f.signature for f in message.fragments]))
+            list(map(lambda x: x, [f.signature for f in message.fragments])))
         self.assertEqual([False, True, True],
-            map(lambda x: x, [f.hidden for f in message.fragments]))
+            list(map(lambda x: x, [f.hidden for f in message.fragments])))
         self.assertTrue("folks" in message.fragments[0].content)
         self.assertTrue("riak-users" in message.fragments[2].content)
 
@@ -24,13 +24,13 @@ class EmailMessageTest(unittest.TestCase):
 
         self.assertEqual(6, len(message.fragments))
         self.assertEqual([False, True, False, True, False, False],
-            map(lambda x: x, [f.quoted for f in message.fragments]))
+            list(map(lambda x: x, [f.quoted for f in message.fragments])))
 
         self.assertEqual([False, False, False, False, False, True],
-            map(lambda x: x, [f.signature for f in message.fragments]))
+            list(map(lambda x: x, [f.signature for f in message.fragments])))
 
         self.assertEqual([False, False, False, True, True, True],
-            map(lambda x: x, [f.hidden for f in message.fragments]))
+            list(map(lambda x: x, [f.hidden for f in message.fragments])))
 
         self.assertTrue("Hi," in message.fragments[0].content)
         self.assertTrue("On" in message.fragments[1].content)
@@ -64,13 +64,13 @@ class EmailMessageTest(unittest.TestCase):
         self.assertEqual(2, len(message.fragments))
 
         self.assertEqual([False, False],
-            map(lambda x: x, [f.quoted for f in message.fragments]))
+            list(map(lambda x: x, [f.quoted for f in message.fragments])))
 
         self.assertEqual([False, True],
-            map(lambda x: x, [f.signature for f in message.fragments]))
+            list(map(lambda x: x, [f.signature for f in message.fragments])))
 
         self.assertEqual([False, True],
-            map(lambda x: x, [f.hidden for f in message.fragments]))
+            list(map(lambda x: x, [f.hidden for f in message.fragments])))
 
         self.assertTrue('--' in message.fragments[1].content)
 
