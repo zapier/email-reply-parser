@@ -44,7 +44,7 @@ class EmailMessageTest(unittest.TestCase):
 
     def test_multiline_reply_headers(self):
         message = self.get_email('email_1_6')
-        self.assertIn('I get', message.fragments[0].content)
+        self.assertTrue('I get' in message.fragments[0].content)
         self.assertRegexpMatches(message.fragments[1].content, 'On')
 
     def test_captures_date_string(self):
