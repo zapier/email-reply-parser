@@ -12,10 +12,14 @@ class EmailMessageTest(unittest.TestCase):
         message = self.get_email('email_1_1')
 
         self.assertEqual(3, len(message.fragments))
-        self.assertEqual([False, True, True],
-            list(map(lambda x: x, [f.signature for f in message.fragments])))
-        self.assertEqual([False, True, True],
-            list(map(lambda x: x, [f.hidden for f in message.fragments])))
+        self.assertEqual(
+            [False, True, True],
+            [f.signature for f in message.fragments]
+        )
+        self.assertEqual(
+            [False, True, True],
+            [f.hidden for f in message.fragments]
+        )
         self.assertTrue("folks" in message.fragments[0].content)
         self.assertTrue("riak-users" in message.fragments[2].content)
 
@@ -23,14 +27,20 @@ class EmailMessageTest(unittest.TestCase):
         message = self.get_email('email_1_2')
 
         self.assertEqual(6, len(message.fragments))
-        self.assertEqual([False, True, False, True, False, False],
-            list(map(lambda x: x, [f.quoted for f in message.fragments])))
+        self.assertEqual(
+            [False, True, False, True, False, False],
+            [f.quoted for f in message.fragments]
+        )
 
-        self.assertEqual([False, False, False, False, False, True],
-            list(map(lambda x: x, [f.signature for f in message.fragments])))
+        self.assertEqual(
+            [False, False, False, False, False, True],
+            [f.signature for f in message.fragments]
+        )
 
-        self.assertEqual([False, False, False, True, True, True],
-            list(map(lambda x: x, [f.hidden for f in message.fragments])))
+        self.assertEqual(
+            [False, False, False, True, True, True],
+            [f.hidden for f in message.fragments]
+        )
 
         self.assertTrue("Hi," in message.fragments[0].content)
         self.assertTrue("On" in message.fragments[1].content)
@@ -63,14 +73,20 @@ class EmailMessageTest(unittest.TestCase):
         message = self.get_email('correct_sig')
         self.assertEqual(2, len(message.fragments))
 
-        self.assertEqual([False, False],
-            list(map(lambda x: x, [f.quoted for f in message.fragments])))
+        self.assertEqual(
+            [False, False],
+            [f.quoted for f in message.fragments]
+        )
 
-        self.assertEqual([False, True],
-            list(map(lambda x: x, [f.signature for f in message.fragments])))
+        self.assertEqual(
+            [False, True],
+            [f.signature for f in message.fragments]
+        )
 
-        self.assertEqual([False, True],
-            list(map(lambda x: x, [f.hidden for f in message.fragments])))
+        self.assertEqual(
+            [False, True],
+            [f.hidden for f in message.fragments]
+        )
 
         self.assertTrue('--' in message.fragments[1].content)
 
