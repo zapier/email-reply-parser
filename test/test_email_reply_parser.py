@@ -45,7 +45,7 @@ class EmailMessageTest(unittest.TestCase):
     def test_multiline_reply_headers(self):
         message = self.get_email('email_1_6')
         self.assertTrue('I get' in message.fragments[0].content)
-        self.assertRegexpMatches(message.fragments[1].content, 'On')
+        self.assertTrue('On' in message.fragments[1].content)
 
     def test_captures_date_string(self):
         message = self.get_email('email_1_4')
@@ -77,9 +77,9 @@ class EmailMessageTest(unittest.TestCase):
     def test_deals_with_windows_line_endings(self):
         msg = self.get_email('email_1_7')
 
-        self.assertRegexpMatches(msg.fragments[0].content, ':\+1:')
-        self.assertRegexpMatches(msg.fragments[1].content, 'On')
-        self.assertRegexpMatches(msg.fragments[1].content, 'Steps 0-2')
+        self.assertTrue(':+1:' in msg.fragments[0].content)
+        self.assertTrue('On' in msg.fragments[1].content)
+        self.assertTrue('Steps 0-1' in msg.fragments[1].content)
 
     def test_reply_is_parsed(self):
         message = self.get_email('email_1_2')
