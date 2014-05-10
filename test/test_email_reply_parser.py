@@ -95,7 +95,7 @@ class EmailMessageTest(unittest.TestCase):
 
         self.assertTrue(':+1:' in msg.fragments[0].content)
         self.assertTrue('On' in msg.fragments[1].content)
-        self.assertTrue('Steps 0-1' in msg.fragments[1].content)
+        self.assertTrue('Steps 0-2' in msg.fragments[1].content)
 
     def test_reply_is_parsed(self):
         message = self.get_email('email_1_2')
