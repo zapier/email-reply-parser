@@ -109,6 +109,10 @@ class EmailMessageTest(unittest.TestCase):
         with open('test/emails/email_one_is_not_on.txt') as email:
             self.assertTrue("On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
 
+    def test_gmail_reply(self):
+        with open('test/emails/email_gmail.txt') as email:
+            self.assertTrue("xxx@gmail.com" not in EmailReplyParser.parse_reply(email.read()))
+
     def get_email(self, name):
         """ Return EmailMessage instance
         """
