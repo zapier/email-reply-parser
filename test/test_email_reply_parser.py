@@ -109,6 +109,18 @@ class EmailMessageTest(unittest.TestCase):
         with open('test/emails/email_one_is_not_on.txt') as email:
             self.assertTrue("On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
 
+    def test_anglebrackets_stripped(self):
+        with open('test/emails/email_anglebrackets_stripped.txt') as email:
+            self.assertTrue("christine.rolemey_re@msg.example.com" not in EmailReplyParser.parse_reply(email.read()))
+
+    def test_anglebrackets_stripped_2(self):
+        with open('test/emails/email_anglebrackets_stripped_2.txt') as email:
+            self.assertTrue("Hi Luisa" not in EmailReplyParser.parse_reply(email.read()))
+
+    def test_inline_wrote(self):
+        with open('test/emails/email_inline_wrote.txt') as email:
+            self.assertTrue("Hi Adrian," not in EmailReplyParser.parse_reply(email.read()))
+
     def get_email(self, name):
         """ Return EmailMessage instance
         """
