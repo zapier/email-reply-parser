@@ -96,7 +96,7 @@ class EmailMessage(object):
         if re.match(self.SIG_REGEX, line):
             line.lstrip()
 
-        is_quoted = re.match(self.QUOTED_REGEX, line) != None
+        is_quoted = re.match(self.QUOTED_REGEX, line) is not None
 
         if self.fragment and len(line.strip()) == 0:
             if re.match(self.SIG_REGEX, self.fragment.lines[-1]):
@@ -104,7 +104,7 @@ class EmailMessage(object):
                 self._finish_fragment()
 
         if self.fragment and ((self.fragment.quoted == is_quoted)
-            or (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
+                              or (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
 
             self.fragment.lines.append(line)
         else:
@@ -118,7 +118,7 @@ class EmailMessage(object):
 
             Returns True or False
         """
-        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) != None
+        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) is not None
 
     def _finish_fragment(self):
         """ Creates fragment
@@ -128,8 +128,8 @@ class EmailMessage(object):
             self.fragment.finish()
             if not self.found_visible:
                 if self.fragment.quoted \
-                or self.fragment.signature \
-                or (len(self.fragment.content.strip()) == 0):
+                        or self.fragment.signature \
+                        or (len(self.fragment.content.strip()) == 0):
 
                     self.fragment.hidden = True
                 else:
