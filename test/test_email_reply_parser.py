@@ -5,9 +5,10 @@ import unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from email_reply_parser import EmailReplyParser
 
+TEST_EMAILS_DIR = os.path.join(os.path.dirname(__file__), 'emails')
+
 
 class EmailMessageTest(unittest.TestCase):
-
     def test_simple_body(self):
         message = self.get_email('email_1_1')
 
@@ -102,17 +103,18 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue("You can list the keys for the bucket" in message.reply)
 
     def test_sent_from_iphone(self):
-        with open('test/emails/email_iPhone.txt') as email:
+        with open(os.path.join(TEST_EMAILS_DIR, 'email_iPhone.txt')) as email:
             self.assertTrue("Sent from my iPhone" not in EmailReplyParser.parse_reply(email.read()))
 
     def test_email_one_is_not_on(self):
-        with open('test/emails/email_one_is_not_on.txt') as email:
-            self.assertTrue("On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
+        with open(os.path.join(TEST_EMAILS_DIR, 'email_one_is_not_on.txt')) as email:
+            self.assertTrue(
+                "On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
 
     def get_email(self, name):
         """ Return EmailMessage instance
         """
-        with open('test/emails/%s.txt' % name) as f:
+        with open(os.path.join(TEST_EMAILS_DIR, '%s.txt' % name)) as f:
             text = f.read()
         return EmailReplyParser.read(text)
 
