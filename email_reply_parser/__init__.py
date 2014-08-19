@@ -38,7 +38,7 @@ class EmailMessage(object):
 
     SIG_REGEX = r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})'
     QUOTE_HDR_REGEX = r'^:etorw.*nO'
-    MULTI_QUOTE_HDR_REGEX = r'(On\s.*?wrote:)'
+    MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
     QUOTED_REGEX = r'(>+)'
 
     def __init__(self, text):

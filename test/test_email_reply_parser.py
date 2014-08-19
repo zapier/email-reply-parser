@@ -109,6 +109,12 @@ class EmailMessageTest(unittest.TestCase):
         with open('test/emails/email_one_is_not_on.txt') as email:
             self.assertTrue("On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
 
+    def test_partial_quote_header(self):
+        message = self.get_email('email_partial_quote_header')
+        self.assertTrue("On your remote host you can run:" in message.reply)
+        self.assertTrue("telnet 127.0.0.1 52698" in message.reply)
+        self.assertTrue("This should connect to TextMate" in message.reply)
+
     def get_email(self, name):
         """ Return EmailMessage instance
         """
