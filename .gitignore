@@ -8,4 +8,4 @@ tests/.DS_Store
 .project
 dist/
 dist/*
-
+.tox/
