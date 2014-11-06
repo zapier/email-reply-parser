@@ -115,6 +115,10 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue("telnet 127.0.0.1 52698" in message.reply)
         self.assertTrue("This should connect to TextMate" in message.reply)
 
+    def test_email_headers_no_delimiter(self):
+        message = self.get_email('email_headers_no_delimiter')
+        self.assertEqual(message.reply.strip(), 'And another reply!')
+
     def get_email(self, name):
         """ Return EmailMessage instance
         """
