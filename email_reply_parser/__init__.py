@@ -40,6 +40,7 @@ class EmailMessage(object):
     QUOTE_HDR_REGEX = r'^:etorw.*nO'
     MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
     QUOTED_REGEX = r'(>+)'
+    HEADER_REGEX = r'^(From|Sent|To|Subject): .+'
 
     def __init__(self, text):
         self.fragments = []
@@ -91,25 +92,21 @@ class EmailMessage(object):
             line - a row of text from an email message
         """
 
-        line.strip('\n')
-
-        if re.match(self.SIG_REGEX, line):
-            line.lstrip()
-
-        is_quoted = re.match(self.QUOTED_REGEX, line) != None
+        is_quoted = re.match(self.QUOTED_REGEX, line) is not None
+        is_header = re.match(self.HEADER_REGEX, line) is not None
 
         if self.fragment and len(line.strip()) == 0:
             if re.match(self.SIG_REGEX, self.fragment.lines[-1]):
                 self.fragment.signature = True
                 self._finish_fragment()
 
-        if self.fragment and ((self.fragment.quoted == is_quoted)
+        if self.fragment and (((self.fragment.headers == is_header) and (self.fragment.quoted == is_quoted))
             or (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
 
             self.fragment.lines.append(line)
         else:
             self._finish_fragment()
-            self.fragment = Fragment(is_quoted, line)
+            self.fragment = Fragment(is_quoted, line, headers=is_header)
 
     def quote_header(self, line):
         """ Determines whether line is part of a quoted area
@@ -126,8 +123,15 @@ class EmailMessage(object):
 
         if self.fragment:
             self.fragment.finish()
+            if self.fragment.headers:
+                # Regardless of what's been seen to this point, if we encounter a headers fragment,
+                # all the previous fragments should be marked hidden and found_visible set to False.
+                self.found_visible = False
+                for f in self.fragments:
+                    f.hidden = True
             if not self.found_visible:
                 if self.fragment.quoted \
+                or self.fragment.headers \
                 or self.fragment.signature \
                 or (len(self.fragment.content.strip()) == 0):
 
@@ -143,8 +147,9 @@ class Fragment(object):
         an Email Message, labeling each part.
     """
 
-    def __init__(self, quoted, first_line):
+    def __init__(self, quoted, first_line, headers=False):
         self.signature = False
+        self.headers = headers
         self.hidden = False
         self.quoted = quoted
         self._content = None
