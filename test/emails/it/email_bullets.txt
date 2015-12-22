@@ -1,0 +1,22 @@
+test 2 this should list second
+
+and have spaces
+
+and retain this formatting
+
+
+   - how about bullets
+   - and another
+
+
+Il 19/dic/2015 19:37, "Claudio Cardinali" <claudio@csolution.it> ha scritto:
+
+> Give us an example of how you applied what they learned to achieve
+> something in your organization
+
+
+
+
+-- 
+
+*Joe Smith | Director, Product Management*

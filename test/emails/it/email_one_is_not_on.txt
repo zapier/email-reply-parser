@@ -1,0 +1,10 @@
+Thank, this is really helpful.
+
+One outstanding question I had:
+
+Locally (on development), when I run...
+
+Il 19/dic/2015 19:37, "Claudio Cardinali" <claudio@csolution.it> ha scritto:
+
+> The good news is that I've found a much better query for lastLocation.
+>
