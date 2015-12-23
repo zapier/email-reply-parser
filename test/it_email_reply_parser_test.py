@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from email_reply_parser import EmailReplyParser
 
 
-class EmailMessageTest(unittest.TestCase):
+class ItEmailMessageTest(unittest.TestCase):
 
     def test_simple_body(self):
         message = self.get_email('email_1_1')
@@ -125,9 +125,6 @@ class EmailMessageTest(unittest.TestCase):
         with open('test/emails/it/%s.txt' % name) as f:
             text = f.read()
         return EmailReplyParser.read(text, 'it')
-
-    def suite():
-        return unittest.TestLoader().loadTestsFromTestCase(EmailMessageTest)
 
 if __name__ == '__main__':
     unittest.main()
