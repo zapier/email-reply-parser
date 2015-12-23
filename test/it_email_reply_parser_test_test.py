@@ -126,6 +126,8 @@ class EmailMessageTest(unittest.TestCase):
             text = f.read()
         return EmailReplyParser.read(text, 'it')
 
+    def suite():
+        return unittest.TestLoader().loadTestsFromTestCase(EmailMessageTest)
 
 if __name__ == '__main__':
     unittest.main()
