@@ -34,5 +34,5 @@ setup(
         "Programming Language :: Python :: 3.4",
     ],
     requires=['pyyaml'],
-    test_requires=['pyyaml']
+    tests_require=['pyyaml']
 )
