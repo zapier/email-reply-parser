@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from email_reply_parser import EmailReplyParser
 
 
-class EmailMessageTest(unittest.TestCase):
+class ItEmailMessageTest(unittest.TestCase):
 
     def test_simple_body(self):
         message = self.get_email('email_1_1')
@@ -43,7 +43,7 @@ class EmailMessageTest(unittest.TestCase):
         )
 
         self.assertTrue("Hi," in message.fragments[0].content)
-        self.assertTrue("On" in message.fragments[1].content)
+        self.assertTrue("Il" in message.fragments[1].content)
         self.assertTrue(">" in message.fragments[3].content)
         self.assertTrue("riak-users" in message.fragments[5].content)
 
@@ -55,13 +55,13 @@ class EmailMessageTest(unittest.TestCase):
     def test_multiline_reply_headers(self):
         message = self.get_email('email_1_6')
         self.assertTrue('I get' in message.fragments[0].content)
-        self.assertTrue('On' in message.fragments[1].content)
+        self.assertTrue('Il' in message.fragments[1].content)
 
     def test_captures_date_string(self):
         message = self.get_email('email_1_4')
 
         self.assertTrue('Awesome' in message.fragments[0].content)
-        self.assertTrue('On' in message.fragments[1].content)
+        self.assertTrue('Il' in message.fragments[1].content)
         self.assertTrue('Loader' in message.fragments[1].content)
 
     def test_complex_body_with_one_fragment(self):
@@ -94,7 +94,7 @@ class EmailMessageTest(unittest.TestCase):
         msg = self.get_email('email_1_7')
 
         self.assertTrue(':+1:' in msg.fragments[0].content)
-        self.assertTrue('On' in msg.fragments[1].content)
+        self.assertTrue('Il' in msg.fragments[1].content)
         self.assertTrue('Steps 0-2' in msg.fragments[1].content)
 
     def test_reply_is_parsed(self):
@@ -122,10 +122,9 @@ class EmailMessageTest(unittest.TestCase):
     def get_email(self, name):
         """ Return EmailMessage instance
         """
-        with open('test/emails/%s.txt' % name) as f:
+        with open('test/emails/it/%s.txt' % name) as f:
             text = f.read()
-        return EmailReplyParser.read(text)
-
+        return EmailReplyParser.read(text, 'it')
 
 if __name__ == '__main__':
     unittest.main()

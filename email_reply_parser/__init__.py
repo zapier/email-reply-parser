@@ -1,4 +1,5 @@
 import re
+from regexps import regexps
 
 """
     email_reply_parser is a python library port of GitHub's Email Reply Parser.
@@ -12,17 +13,17 @@ class EmailReplyParser(object):
     """
 
     @staticmethod
-    def read(text):
+    def read(text, locale='en'):
         """ Factory method that splits email into list of fragments
 
             text - A string email body
 
             Returns an EmailMessage instance
         """
-        return EmailMessage(text).read()
+        return EmailMessage(text, locale).read()
 
     @staticmethod
-    def parse_reply(text):
+    def parse_reply(text, locale='en'):
         """ Provides the reply portion of email.
 
             text - A string email body
@@ -36,17 +37,12 @@ class EmailMessage(object):
     """ An email message represents a parsed email body.
     """
 
-    SIG_REGEX = r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})'
-    QUOTE_HDR_REGEX = r'^:etorw.*nO'
-    MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
-    QUOTED_REGEX = r'(>+)'
-    HEADER_REGEX = r'^(From|Sent|To|Subject): .+'
-
-    def __init__(self, text):
+    def __init__(self, text, locale='en'):
         self.fragments = []
         self.fragment = None
         self.text = text.replace('\r\n', '\n')
         self.found_visible = False
+        self.regexps = regexps(locale)
 
     def read(self):
         """ Creates new fragment for each line
@@ -57,9 +53,9 @@ class EmailMessage(object):
 
         self.found_visible = False
 
-        is_multi_quote_header = re.search(self.MULTI_QUOTE_HDR_REGEX, self.text, re.MULTILINE | re.DOTALL)
+        is_multi_quote_header = re.search(self.regexps['multi_quote_hdr'], self.text, re.MULTILINE | re.DOTALL)
         if is_multi_quote_header:
-            expr = re.compile(self.MULTI_QUOTE_HDR_REGEX, flags=re.DOTALL)
+            expr = re.compile(self.regexps['multi_quote_hdr'], flags=re.DOTALL)
             self.text = expr.sub(
                 is_multi_quote_header.groups()[0].replace('\n', ''),
                 self.text)
@@ -92,11 +88,11 @@ class EmailMessage(object):
             line - a row of text from an email message
         """
 
-        is_quoted = re.match(self.QUOTED_REGEX, line) is not None
-        is_header = re.match(self.HEADER_REGEX, line) is not None
+        is_quoted = re.match(self.regexps['quoted'], line) is not None
+        is_header = re.match(self.regexps['header'], line) is not None
 
         if self.fragment and len(line.strip()) == 0:
-            if re.match(self.SIG_REGEX, self.fragment.lines[-1]):
+            if re.match(self.regexps['sig'], self.fragment.lines[-1]):
                 self.fragment.signature = True
                 self._finish_fragment()
 
@@ -115,7 +111,7 @@ class EmailMessage(object):
 
             Returns True or False
         """
-        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) != None
+        return re.match(self.regexps['quote_hdr'], line[::-1]) != None
 
     def _finish_fragment(self):
         """ Creates fragment
