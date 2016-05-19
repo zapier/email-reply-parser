@@ -1,0 +1,14 @@
+This is a test for inbox replying to a github message.
+
+
+
+On Wed, May 18, 2016 at 11:10 PM Steven Scott <notifications@github.com>
+wrote:
+
+
+That way people can tell how outdated their version is, mostly because I'm
+personally too lazy to increment a version number all the time 👍
+
+—
+You are receiving this because you are subscribed to this thread.
+Reply to this email directly or view it on GitHub

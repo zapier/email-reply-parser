@@ -121,6 +121,11 @@ class EmailMessageTest(unittest.TestCase):
         message = self.get_email('email_1_2')
         self.assertTrue("You can list the keys for the bucket" in message.reply)
 
+    def test_reply_from_gmail(self):
+        with open('test/emails/email_gmail.txt') as f:
+            self.assertEqual('This is a test for inbox replying to a github message.',
+                             EmailReplyParser.parse_reply(f.read()))
+
     def test_parse_out_just_top_for_outlook_reply(self):
         with open('test/emails/email_2_1.txt') as f:
             self.assertEqual("Outlook with a reply", EmailReplyParser.parse_reply(f.read()))

@@ -9,3 +9,4 @@ tests/.DS_Store
 dist/
 dist/*
 
+build/

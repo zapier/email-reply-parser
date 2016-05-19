@@ -37,11 +37,13 @@ class EmailMessage(object):
     """ An email message represents a parsed email body.
     """
 
-    SIG_REGEX = r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})'
-    QUOTE_HDR_REGEX = r'^:etorw.*nO'
-    MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
-    QUOTED_REGEX = r'(>+)'
-    HEADER_REGEX = r'^(From|Sent|To|Subject): .+'
+    SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
+    QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
+    QUOTED_REGEX = re.compile(r'(>+)')
+    HEADER_REGEX = re.compile(r'^(From|Sent|To|Subject): .+')
+    _MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+    MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
+    MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL)
 
     def __init__(self, text):
         self.fragments = []
@@ -58,12 +60,9 @@ class EmailMessage(object):
 
         self.found_visible = False
 
-        is_multi_quote_header = re.search(self.MULTI_QUOTE_HDR_REGEX, self.text, re.MULTILINE | re.DOTALL)
+        is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
-            expr = re.compile(self.MULTI_QUOTE_HDR_REGEX, flags=re.DOTALL)
-            self.text = expr.sub(
-                is_multi_quote_header.groups()[0].replace('\n', ''),
-                self.text)
+            self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
 
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
         #   See email_2_2.txt for an example
@@ -96,18 +95,18 @@ class EmailMessage(object):
 
             line - a row of text from an email message
         """
-
-        is_quoted = re.match(self.QUOTED_REGEX, line) is not None
-        is_header = re.match(self.HEADER_REGEX, line) is not None
+        is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
+        is_quoted = self.QUOTED_REGEX.match(line) is not None
+        is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
 
         if self.fragment and len(line.strip()) == 0:
-            if re.match(self.SIG_REGEX, self.fragment.lines[-1].strip()):
+            if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
                 self.fragment.signature = True
                 self._finish_fragment()
 
         if self.fragment \
                 and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
-                         (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
+                         (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
 
             self.fragment.lines.append(line)
         else:
@@ -121,7 +120,7 @@ class EmailMessage(object):
 
             Returns True or False
         """
-        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) is not None
+        return self.QUOTE_HDR_REGEX.match(line[::-1]) is not None
 
     def _finish_fragment(self):
         """ Creates fragment
