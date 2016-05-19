@@ -1,10 +1,11 @@
-import re
-
 """
     email_reply_parser is a python library port of GitHub's Email Reply Parser.
 
-    For more information, visit https://github.com/zapier/email-reply-parser
+    For more information, visit https://github.com/DisruptiveLabs/email-reply-parser for an
+    up to date fork, or https://github.com/zapier/email-reply-parser for the original port
 """
+
+import re
 
 
 class EmailReplyParser(object):
@@ -64,6 +65,10 @@ class EmailMessage(object):
                 is_multi_quote_header.groups()[0].replace('\n', ''),
                 self.text)
 
+        # Fix any outlook style replies, with the reply immediately above the signature boundary line
+        #   See email_2_2.txt for an example
+        self.text = re.sub('([^\n])(?=\n ?[_-]{7,})', '\\1\n', self.text, re.MULTILINE)
+
         self.lines = self.text.split('\n')
         self.lines.reverse()
 
@@ -96,12 +101,13 @@ class EmailMessage(object):
         is_header = re.match(self.HEADER_REGEX, line) is not None
 
         if self.fragment and len(line.strip()) == 0:
-            if re.match(self.SIG_REGEX, self.fragment.lines[-1]):
+            if re.match(self.SIG_REGEX, self.fragment.lines[-1].strip()):
                 self.fragment.signature = True
                 self._finish_fragment()
 
-        if self.fragment and (((self.fragment.headers == is_header) and (self.fragment.quoted == is_quoted))
-            or (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
+        if self.fragment \
+                and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
+                         (self.fragment.quoted and (self.quote_header(line) or len(line.strip()) == 0))):
 
             self.fragment.lines.append(line)
         else:
@@ -115,7 +121,7 @@ class EmailMessage(object):
 
             Returns True or False
         """
-        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) != None
+        return re.match(self.QUOTE_HDR_REGEX, line[::-1]) is not None
 
     def _finish_fragment(self):
         """ Creates fragment
@@ -131,9 +137,9 @@ class EmailMessage(object):
                     f.hidden = True
             if not self.found_visible:
                 if self.fragment.quoted \
-                or self.fragment.headers \
-                or self.fragment.signature \
-                or (len(self.fragment.content.strip()) == 0):
+                        or self.fragment.headers \
+                        or self.fragment.signature \
+                        or (len(self.fragment.content.strip()) == 0):
 
                     self.fragment.hidden = True
                 else:
@@ -165,4 +171,4 @@ class Fragment(object):
 
     @property
     def content(self):
-        return self._content
+        return self._content.strip()
