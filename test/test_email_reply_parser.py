@@ -123,9 +123,7 @@ class EmailMessageTest(unittest.TestCase):
 
     def test_parse_out_just_top_for_outlook_reply(self):
         with open('test/emails/email_2_1.txt') as f:
-            fragments = EmailReplyParser.read(f.read())
-            f.seek(0)
-            self.assertEqual("Outlook with a reply", EmailReplyParser.parse_reply(f.read()), repr(fragments))
+            self.assertEqual("Outlook with a reply", EmailReplyParser.parse_reply(f.read()))
 
     def test_parse_out_just_top_for_outlook_with_reply_directly_above_line(self):
         with open('test/emails/email_2_2.txt') as f:
