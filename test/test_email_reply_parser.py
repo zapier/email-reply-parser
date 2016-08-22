@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+import re
 
 import time
 
@@ -155,8 +156,8 @@ class EmailMessageTest(unittest.TestCase):
 
     def test_multiple_on(self):
         message = self.get_email("greedy_on")
-        self.assertRegexpMatches(message.fragments[0].content, '^On your remote host')
-        self.assertRegexpMatches(message.fragments[1].content, '^On 9 Jan 2014')
+        self.assertTrue(re.match('^On your remote host', message.fragments[0].content))
+        self.assertTrue(re.match('^On 9 Jan 2014', message.fragments[1].content))
 
         self.assertEqual(
             [False, True, False],
