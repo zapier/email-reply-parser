@@ -9,7 +9,8 @@ except ImportError:
     from distutils.core import setup
 
 version = {}
-execfile("email_reply_parser/version.py", {}, version)
+with open('email_reply_parser/version.py', 'r') as f:
+    exec(f.read(), {}, version)
 
 setup(
     name='py-email_reply_parser',

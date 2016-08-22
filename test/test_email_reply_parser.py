@@ -176,7 +176,7 @@ class EmailMessageTest(unittest.TestCase):
     def test_pathological_emails(self):
         t0 = time.time()
         message = self.get_email("pathological")
-        self.assertLess(time.time() - t0, 1, "Took too long")
+        self.assertTrue(time.time() - t0 < 1, "Took too long")
 
     def test_doesnt_remove_signature_delimiter_in_mid_line(self):
         message = self.get_email('email_sig_delimiter_in_middle_of_line')
