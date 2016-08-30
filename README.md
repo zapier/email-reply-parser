@@ -22,7 +22,7 @@ Email clients handle reply formatting differently, making parsing a pain. [We in
 Yes that is fine, I will email you in the morning.
 ```
 
-[![Build Status](https://secure.travis-ci.org/zapier/email-reply-parser.png?branch=master)](https://travis-ci.org/zapier/email-reply-parser)
+[![Build Status](https://secure.travis-ci.org/DisruptiveLabs/email-reply-parser.png?branch=master)](https://travis-ci.org/DisruptiveLabs/email-reply-parser)
 
 ## Installation
 
