@@ -1,5 +1,5 @@
 import re
-from regexps import regexps
+from locales import Locales
 
 """
     email_reply_parser is a python library port of GitHub's Email Reply Parser.
@@ -42,7 +42,7 @@ class EmailMessage(object):
         self.fragment = None
         self.text = text.replace('\r\n', '\n')
         self.found_visible = False
-        self.regexps = regexps(locale)
+        self.regexps = Locales.get_locale(locale)
 
     def read(self):
         """ Creates new fragment for each line
