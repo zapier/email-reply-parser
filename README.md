@@ -1,4 +1,7 @@
 # Email Reply Parser for Python
+[![Build Status](https://secure.travis-ci.org/zapier/email-reply-parser.png?branch=master)](https://travis-ci.org/zapier/email-reply-parser)
+[![codecov](https://codecov.io/gh/zapier/email-reply-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/zapier/email-reply-parser)
+
 A port of GitHub's Email Reply Parser library, by the fine folks at [Zapier](https://zapier.com/).
 
 ## Summary
@@ -21,8 +24,6 @@ Email clients handle reply formatting differently, making parsing a pain. [We in
 ```
 Yes that is fine, I will email you in the morning.
 ```
-
-[![Build Status](https://secure.travis-ci.org/zapier/email-reply-parser.png?branch=master)](https://travis-ci.org/zapier/email-reply-parser)
 
 ## Installation
 

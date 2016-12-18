@@ -1,4 +1,5 @@
 .project
+.coverage
 *.pyc
 tests/*.pyc
 tests/.DS_Store
