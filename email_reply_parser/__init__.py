@@ -6,6 +6,7 @@
 
 import re
 
+__all__ = ('EmailReplyParser', 'EmailMessage')
 
 class EmailReplyParser(object):
     """ Represents a email message that is parsed.
@@ -32,17 +33,16 @@ class EmailReplyParser(object):
         return EmailReplyParser.read(text).reply
 
 
+SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
+QUOTE_HDR_REGEX = re.compile(r'^:etorw.*nO')
+MULTI_QUOTE_HDR_REGEX = re.compile(r'(On\s.*?wrote:)', re.MULTILINE | re.DOTALL)
+SINGLE_QUOTE_HDR_REGEX = re.compile(r'(On\s.*?wrote:)', re.DOTALL)
+QUOTED_REGEX = re.compile(r'(>+)')
+
+
 class EmailMessage(object):
     """ An email message represents a parsed email body.
     """
-
-    SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
-    QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
-    QUOTED_REGEX = re.compile(r'(>+)')
-    HEADER_REGEX = re.compile(r'^(From|Sent|To|Subject): .+')
-    _MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
-    MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
-    MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL)
 
     def __init__(self, text):
         self.fragments = []
@@ -59,13 +59,11 @@ class EmailMessage(object):
 
         self.found_visible = False
 
-        is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
+        is_multi_quote_header = MULTI_QUOTE_HDR_REGEX.search(self.text)
         if is_multi_quote_header:
-            self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
-
-        # Fix any outlook style replies, with the reply immediately above the signature boundary line
-        #   See email_2_2.txt for an example
-        self.text = re.sub('([^\n])(?=\n ?[_-]{7,})', '\\1\n', self.text, re.MULTILINE)
+            self.text = SINGLE_QUOTE_HDR_REGEX.sub(
+                is_multi_quote_header.groups()[0].replace('\n', ''),
+                self.text)
 
         self.lines = self.text.split('\n')
         self.lines.reverse()
@@ -94,12 +92,16 @@ class EmailMessage(object):
 
             line - a row of text from an email message
         """
-        is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
-        is_quoted = self.QUOTED_REGEX.match(line) is not None
-        is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
+
+        line.strip('\n')
+
+        if SIG_REGEX.match(line):
+            line.lstrip()
+
+        is_quoted = QUOTED_REGEX.match(line) is not None
 
         if self.fragment and len(line.strip()) == 0:
-            if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
+            if SIG_REGEX.match(self.fragment.lines[-1]):
                 self.fragment.signature = True
                 self._finish_fragment()
 
@@ -119,7 +121,7 @@ class EmailMessage(object):
 
             Returns True or False
         """
-        return self.QUOTE_HDR_REGEX.match(line[::-1]) is not None
+        return QUOTE_HDR_REGEX.match(line[::-1]) is not None
 
     def _finish_fragment(self):
         """ Creates fragment
