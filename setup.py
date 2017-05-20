@@ -5,7 +5,7 @@ import sys
 
 try:
     from setuptools import setup
-except ImportError:
+except (ImportError, RuntimeError):
     from distutils.core import setup
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'email_reply_parser'))
