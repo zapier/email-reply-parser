@@ -3,10 +3,7 @@
 import os
 import sys
 
-try:
-    from setuptools import setup
-except (ImportError, RuntimeError):
-    from distutils.core import setup
+from distutils.core import setup    
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'email_reply_parser'))
 import version
