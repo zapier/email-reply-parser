@@ -5,7 +5,7 @@ import sys
 
 try:
     from setuptools import setup
-except (ImportError, RuntimeError):
+except ImportError:
     from distutils.core import setup
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'email_reply_parser'))
@@ -29,7 +29,6 @@ setup(
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
     ]
