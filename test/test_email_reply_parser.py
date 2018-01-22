@@ -135,6 +135,12 @@ class EmailMessageTest(unittest.TestCase):
         with open('test/emails/email_2_2.txt') as f:
             self.assertEqual("Outlook with a reply directly above line", EmailReplyParser.parse_reply(f.read()))
 
+    def test_parse_out_just_top_for_outlook_with_unusual_headers_format(self):
+        with open('test/emails/email_2_3.txt') as f:
+            self.assertEqual(
+                "Outlook with a reply above headers using unusual format",
+                EmailReplyParser.parse_reply(f.read()))
+
     def test_sent_from_iphone(self):
         with open('test/emails/email_iPhone.txt') as email:
             self.assertTrue("Sent from my iPhone" not in EmailReplyParser.parse_reply(email.read()))
