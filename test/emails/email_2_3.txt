@@ -5,7 +5,7 @@ Outlook with a reply above headers using unusual format
 *To:* user@xxxxx.com
 *Subject:* You have a new message!
 
-Response to Kim by replying directly to this email
+Respond to Kim by replying directly to this email
 
 New message from Kim on Site:
 
