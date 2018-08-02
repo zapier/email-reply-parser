@@ -37,6 +37,7 @@ class EmailMessage(object):
     """
 
     SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
+    BLACKBERRY_REGEX = re.compile(r'(--|__|-\w)|(^Sent with Black(\w+\s*){1,3})')
     QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
     QUOTED_REGEX = re.compile(r'(>+)')
     HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject):\*? .+')
@@ -101,7 +102,8 @@ class EmailMessage(object):
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None or is_alt_header
 
         if self.fragment and len(line.strip()) == 0:
-            if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
+            if self.SIG_REGEX.match(self.fragment.lines[-1].strip()) or \
+               self.BLACKBERRY_REGEX.match(self.fragment.lines[-1].strip()):
                 self.fragment.signature = True
                 self._finish_fragment()
 
