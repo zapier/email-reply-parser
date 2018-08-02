@@ -40,6 +40,7 @@ class EmailMessage(object):
     QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
     QUOTED_REGEX = re.compile(r'(>+)')
     HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject):\*? .+')
+    ALT_HEADER_REGEX = re.compile(r'^\*{2}?(From|Sent|To|Subject):\*{2}? .+)
     _MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
     MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
     MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL)
@@ -96,7 +97,8 @@ class EmailMessage(object):
         """
         is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
         is_quoted = self.QUOTED_REGEX.match(line) is not None
-        is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
+        is_alt_header = self.ALT_HEADER_REGEX.match(line) is not None
+        is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None or is_alt_header
 
         if self.fragment and len(line.strip()) == 0:
             if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
