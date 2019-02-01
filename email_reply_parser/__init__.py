@@ -40,7 +40,7 @@ class EmailMessage(object):
     QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
     QUOTED_REGEX = re.compile(r'(>+)')
     HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject):\*? .+')
-    _MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+    _MULTI_QUOTE_HDR_REGEX = r'(?!(At|On).*(At|On)\s.+?wrote:)((At|On)\s(.+?)wrote:)'
     MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
     MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL)
 
