@@ -1,0 +1,162 @@
+{
+  "vi": {
+    "Sent from": "\u0110\u01b0\u1ee3c g\u1eedi t\u1eeb",
+    "From": "T\u1eeb",
+    "To": "\u0110\u1ebfn",
+    "wrote": "\u0111\u00e3 vi\u1ebft",
+    "Sent": "G\u1edfi",
+    "Subject": "M\u00f4n h\u1ecdc"
+  },
+  "ru": {
+    "Sent from": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e \u0438\u0437",
+    "From": "\u041e\u0442",
+    "To": "\u043a",
+    "wrote": "\u043f\u0438\u0441\u0430\u043b",
+    "Sent": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e",
+    "Subject": "\u041f\u0440\u0435\u0434\u043c\u0435\u0442"
+  },
+  "fr": {
+    "Sent from": "Envoy\u00e9 depuis",
+    "From": "De",
+    "To": "\u00c0",
+    "wrote": "a \u00e9crit",
+    "Sent": "Envoy\u00e9",
+    "Subject": "Objet"
+  },
+  "en": {
+    "Sent from": "Sent from",
+    "From": "From",
+    "To": "To",
+    "wrote": "wrote",
+    "Sent": "Sent",
+    "Subject": "Subject"
+  },
+  "nl": {
+    "Sent from": "Verzonden met",
+    "From": "Van",
+    "To": "Aan",
+    "wrote": "schreef",
+    "Sent": "Verzonden",
+    "Subject": "Onderwerp"
+  },
+  "pt": {
+    "Sent from": "Enviado de",
+    "From": "De",
+    "To": "Para",
+    "wrote": "escrevi",
+    "Sent": "Enviei",
+    "Subject": "Sujeito"
+  },
+  "ko": {
+    "Sent from": "\ubd80\ud130 \ubcf4\ub0b4\uc9c4",
+    "From": "\uc5d0\uc11c",
+    "To": "\uc5d0",
+    "wrote": "\uc4f4",
+    "Sent": "\uc804\uc1a1 \ub428",
+    "Subject": "\uc81c\ubaa9"
+  },
+  "de": {
+    "Sent from": "Gesendet von",
+    "From": "Von",
+    "To": "An",
+    "wrote": "schrieb",
+    "Sent": "geschickt",
+    "Subject": "Betreff"
+  },
+  "tr": {
+    "Sent from": "Den g\u00f6nderildi",
+    "From": "itibaren",
+    "To": "i\u00e7in",
+    "wrote": "yazd\u0131",
+    "Sent": "G\u00f6nderilen",
+    "Subject": "konu"
+  },
+  "it": {
+    "Sent from": "Inviato da",
+    "From": "Da",
+    "To": "A",
+    "wrote": "ha scritto",
+    "Sent": "Inviato",
+    "Subject": "Oggetto"
+  },
+  "id": {
+    "Sent from": "Dikirim dari",
+    "From": "Dari",
+    "To": "Untuk",
+    "wrote": "menulis",
+    "Sent": "Terkirim",
+    "Subject": "Subyek"
+  },
+  "sk": {
+    "Sent from": "Odoslan\u00e9 od",
+    "From": "z",
+    "To": "na",
+    "wrote": "nap\u00edsal",
+    "Sent": "odoslan\u00e9",
+    "Subject": "predmet"
+  },
+  "ar": {
+    "Sent from": "\u0627\u0631\u0633\u0644\u062a \u0645\u0646",
+    "From": "\u0645\u0646 \u0639\u0646\u062f",
+    "To": "\u0625\u0644\u0649",
+    "wrote": "\u0643\u062a\u0628",
+    "Sent": "\u0623\u0631\u0633\u0644\u062a",
+    "Subject": "\u0645\u0648\u0636\u0648\u0639"
+  },
+  "es": {
+    "Sent from": "Enviado desde",
+    "From": "De",
+    "To": "Para",
+    "wrote": "escribi\u00f3",
+    "Sent": "Expedido",
+    "Subject": "Asunto"
+  },
+  "th": {
+    "Sent from": "\u0e2a\u0e48\u0e07\u0e08\u0e32\u0e01",
+    "From": "\u0e08\u0e32\u0e01",
+    "To": "\u0e44\u0e1b\u0e22\u0e31\u0e07",
+    "wrote": "\u0e40\u0e02\u0e35\u0e22\u0e19",
+    "Sent": "\u0e2a\u0e48\u0e07",
+    "Subject": "\u0e40\u0e23\u0e37\u0e48\u0e2d\u0e07"
+  },
+  "fi": {
+    "Sent from": "L\u00e4hetetty",
+    "From": "alkaen",
+    "To": "jotta",
+    "wrote": "kirjoitti",
+    "Sent": "L\u00e4hetetyt",
+    "Subject": "aihe"
+  },
+  "zh": {
+    "Sent from": "\u6765\u81ea",
+    "From": "\u4ece",
+    "To": "\u81f3",
+    "wrote": "\u5199",
+    "Sent": "\u53d1\u9001",
+    "Subject": "\u5b66\u79d1"
+  },
+  "ja": {
+    "Sent from": "\u9001\u4fe1\u5143",
+    "From": "\u304b\u3089",
+    "To": "\u306b",
+    "wrote": "\u66f8\u304d\u307e\u3057\u305f",
+    "Sent": "\u9001\u4fe1\u6e08\u307f",
+    "Subject": "\u4ef6\u540d"
+  },
+  "pl": {
+    "Sent from": "Wys\u0142ane z",
+    "From": "Z",
+    "To": "Do",
+    "wrote": "napisa\u0142",
+    "Sent": "Wys\u0142ane",
+    "Subject": "Przedmiot"
+  },
+  "he": {
+    "Sent from": "\u05e0\u05e9\u05dc\u05d7 \u05de",
+    "From": "\u05de",
+    "To": "\u05dc",
+    "wrote": "\u05db\u05ea\u05d1\u05ea\u05d9",
+    "Sent": "\u05e0\u05e9\u05dc\u05d7",
+    "Subject": "\u05e0\u05d5\u05e9\u05d0"
+  }
+}
