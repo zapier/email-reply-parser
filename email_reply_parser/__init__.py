@@ -1,54 +1,105 @@
 """
     email_reply_parser is a python library port of GitHub's Email Reply Parser.
 
-    For more information, visit https://github.com/zapier/email-reply-parser
+    For more information, visit https://github.com/zapier/email_reply_parser
 """
 
 import re
+import json
 
 
 class EmailReplyParser(object):
     """ Represents a email message that is parsed.
     """
+    def __init__(self, language='en'):
+        self.language = language
 
-    @staticmethod
-    def read(text):
+    def read(self, text):
         """ Factory method that splits email into list of fragments
 
             text - A string email body
 
             Returns an EmailMessage instance
         """
-        return EmailMessage(text).read()
+        return EmailMessage(text, self.language).read()
 
-    @staticmethod
-    def parse_reply(text):
+    def parse_reply(self, text):
         """ Provides the reply portion of email.
 
             text - A string email body
 
             Returns reply body message
         """
-        return EmailReplyParser.read(text).reply
+        return self.read(text).reply
 
 
 class EmailMessage(object):
     """ An email message represents a parsed email body.
     """
-
-    SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
-    QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
-    QUOTED_REGEX = re.compile(r'(>+)')
-    HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject):\*? .+')
-    _MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
-    MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
-    MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL)
-
-    def __init__(self, text):
+    def __init__(self, text, language):
         self.fragments = []
         self.fragment = None
         self.text = text.replace('\r\n', '\n')
         self.found_visible = False
+        self.SIG_REGEX = None
+        self.QUOTE_HDR_REGEX = None
+        self.QUOTED_REGEX = None
+        self.HEADER_REGEX = None
+        self._MULTI_QUOTE_HDR_REGEX = None
+        self.MULTI_QUOTE_HDR_REGEX = None
+        self.MULTI_QUOTE_HDR_REGEX_MULTILINE = None
+        with open("languages_support.json", "r") as read_file:
+            self.words_diff_languages = json.load(read_file)
+        self.language = language
+        self.set_regex()
+
+    def default_quoted_header(self):
+        self.QUOTED_REGEX = re.compile(r'(>+)')
+        self.HEADER_REGEX = re.compile(
+            r'^\*?(' + self.words_diff_languages[self.language]['From'] +
+            '|' + self.words_diff_languages[self.language]['Sent'] +
+            '|' + self.words_diff_languages[self.language]['To'] +
+            '|' + self.words_diff_languages[self.language]['Subject'] +
+            '):\*? .+'
+        )
+
+    def nl_support(self):
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_diff_languages[self.language]['Sent from'] + '(\w+\s*){1,3})')
+        self.QUOTE_HDR_REGEX = re.compile('Op.*schreef.*>:$')
+        self.default_quoted_header()
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!Op.*Op\s.+?schreef.*>:)(Op\s(.+?)schreef.*>:)'
+
+    def de_support(self):
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_diff_languages[self.language]['Sent from'] + '(\w+\s*){1,3})')
+        self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
+        self.QUOTED_REGEX = re.compile(r'(>+)')
+        self.HEADER_REGEX = re.compile(
+            r'^\*?(' + self.words_diff_languages[self.language]['From'] +
+            '|' + self.words_diff_languages[self.language]['Sent'] +
+            '|' + self.words_diff_languages[self.language]['To'] +
+            '|' + self.words_diff_languages[self.language]['Subject'] +
+            '):\*? .+'
+        )
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
+
+    def en_support(self):
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
+        self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
+        self.QUOTED_REGEX = re.compile(r'(>+)')
+        self.HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject):\*? .+')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+
+    def set_regex(self):
+        if hasattr(self, self.language+"_support"):
+            getattr(self, self.language+"_support")()
+        else:
+            self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_diff_languages[self.language]['Sent from'] + '(\w+\s*){1,3})')
+            self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_diff_languages[self.language]['wrote'] + ':$')
+            self.default_quoted_header()
+            self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_diff_languages[self.language]['wrote'] + \
+                                          ':)(On\s(.+?)' + self.words_diff_languages[self.language]['wrote'] + ':)'
+        self.MULTI_QUOTE_HDR_REGEX = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
+        self.MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL)
 
     def read(self):
         """ Creates new fragment for each line
