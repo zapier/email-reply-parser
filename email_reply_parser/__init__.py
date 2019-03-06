@@ -48,7 +48,8 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = None
         self.MULTI_QUOTE_HDR_REGEX = None
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = None
-        with open("languages_support.json", "r") as read_file:
+        dir_path = os.path.dirname(__file__)
+        with open(dir_path + "/languages_support.json", "r") as read_file:
             self.words_diff_languages = json.load(read_file)
         self.language = language
         self.set_regex()
