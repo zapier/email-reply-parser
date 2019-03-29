@@ -12,6 +12,7 @@ class EmailReplyParser(object):
     """ Represents a email message that is parsed.
     """
     def __init__(self, language='en'):
+        dir_path = os.path.dirname(__file__)
         with open(dir_path + "/languages_support.json", "r") as read_file:
             self.words_map = json.load(read_file)
         self.language = language
@@ -50,7 +51,6 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = None
         self.MULTI_QUOTE_HDR_REGEX = None
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = None
-        dir_path = os.path.dirname(__file__)
         self.words_map = words_map
         self.language = language
         self.set_regex()
