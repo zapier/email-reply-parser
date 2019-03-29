@@ -80,8 +80,7 @@ class EmailMessage(object):
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
-            '|' + 'mailto'
-            '):\*? .+'
+            '):\*? .+)|mailto:.+'
         )
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
 
