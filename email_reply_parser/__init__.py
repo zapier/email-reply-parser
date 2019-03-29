@@ -62,7 +62,7 @@ class EmailMessage(object):
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
-            '):\*? .+'
+            '):\*? .+|.+(mailto:).+'
         )
 
     def nl_support(self):
@@ -74,21 +74,14 @@ class EmailMessage(object):
     def de_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
-        self.QUOTED_REGEX = re.compile(r'(>+)')
-        self.HEADER_REGEX = re.compile(
-            r'^\*?(' + self.words_map[self.language]['From'] +
-            '|' + self.words_map[self.language]['Sent'] +
-            '|' + self.words_map[self.language]['To'] +
-            '|' + self.words_map[self.language]['Subject'] +
-            '):\*? .+)|mailto:.+'
-        )
+        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
         self.QUOTED_REGEX = re.compile(r'(>+)')
-        self.HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject|mailto):\*? .+')
+        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
 
     def set_regex(self):
