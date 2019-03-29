@@ -16,7 +16,10 @@ setup(
     version=version.VERSION,
     description='Email reply parser',
     packages=['email_reply_parser'],
-    package_data={'email_reply_parser': ['../VERSION']},
+    package_data={
+        'email_reply_parser': ['../VERSION'],
+        '': ['./languages_support.json']
+    },
     author='Royce Haynes',
     author_email='royce.haynes@gmail.com',
     url='https://github.com/zapier/email-reply-parser',
