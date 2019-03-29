@@ -80,6 +80,7 @@ class EmailMessage(object):
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
+            '|' + 'mailto'
             '):\*? .+'
         )
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
@@ -88,7 +89,7 @@ class EmailMessage(object):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
         self.QUOTED_REGEX = re.compile(r'(>+)')
-        self.HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject):\*? .+')
+        self.HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject|mailto):\*? .+')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
 
     def set_regex(self):
