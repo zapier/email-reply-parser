@@ -66,7 +66,7 @@ class EmailMessage(object):
         )
 
     def nl_support(self):
-        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Verstuurd vanaf'] + '(\w+\s*){1,3})')
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('Op.*schreef.*>:$')
         self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Op.*Op\s.+?schreef.*>:)(Op\s(.+?)schreef.*>:)'
@@ -79,7 +79,7 @@ class EmailMessage(object):
 
     def fr_support(self):
         self.SIG_REGEX = re.compile(
-            r'(--|__|-\w)|(^' + self.words_map[self.language]['Envoy\u00e9 depuis'] \
+            r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] \
             + '(\w+\s*){1,3})|(Cordialement)'
         )
         self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
