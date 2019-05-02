@@ -80,7 +80,7 @@ class EmailMessage(object):
     def fr_support(self):
         self.SIG_REGEX = re.compile(
             r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] \
-            + '(\w+\s*){1,3})|(Cordialement)'
+            + '(\w+\s*){1,3})|(.*[Cc]ordialement)'
         )
         self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
         self.default_quoted_header()
@@ -153,8 +153,8 @@ class EmailMessage(object):
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
 
-        if self.fragment and len(line.strip()) == 0:
-            if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
+        if self.fragment:
+            if self.SIG_REGEX.match(line.strip()):
                 self.fragment.signature = True
                 self._finish_fragment()
 
