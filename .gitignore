@@ -6,6 +6,9 @@ tests/.DS_Store
 .DS_Store
 *.egg-info
 .project
+env/
+venv/
 dist/
 dist/*
-
+*.csv
+__pycache__/
