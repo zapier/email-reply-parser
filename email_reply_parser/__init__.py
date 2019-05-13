@@ -24,14 +24,14 @@ class EmailReplyParser(object):
             text - A string email body
             Returns an EmailMessage instance
         """
-        return EmailMessage(text, self.language, self.words_map).read()
+        return EmailMessage(text.replace('\xa0', ' '), self.language, self.words_map).read()
 
     def parse_reply(self, text):
         """ Provides the reply portion of email.
             text - A string email body
             Returns reply body message
         """
-        return self.read(text.replace('\xa0', ' ')).reply
+        return self.read(text).reply
 
 
 class EmailMessage(object):
@@ -125,7 +125,8 @@ class EmailMessage(object):
         self.lines.reverse()
 
         for line in self.lines:
-            self._scan_line(line)
+            if line.strip():
+                self._scan_line(line)
 
         self._finish_fragment()
 
