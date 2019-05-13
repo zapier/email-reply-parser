@@ -1,5 +1,5 @@
-import pandas as pd
-import numpy as np
+# import pandas as pd
+# import numpy as np
 import json
 import time
 from bs4 import BeautifulSoup  # requires lxml
@@ -24,14 +24,15 @@ def profile():
 def verify():
     parser = EmailReplyParser(language='fr')
     texts = json.load(open('test/emails/emails.json'))
+    texts = list(filter(lambda d: type(d) == str, texts))
+    parsed = []
     for text in texts:
         # print(text)
         soup = BeautifulSoup(text, 'lxml')
         text = soup.getText(' ')
-        text = parser.parse_reply(text)
-        print(text)
-
-        # print(text)
+        parsed.append(text)
+        #text = parser.parse_reply(text)
+        #print(text)
 
 if __name__ == '__main__':
     # profile()

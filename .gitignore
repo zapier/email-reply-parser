@@ -12,3 +12,4 @@ dist/
 dist/*
 *.csv
 __pycache__/
+customer_emails.json

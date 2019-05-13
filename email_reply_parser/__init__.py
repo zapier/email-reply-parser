@@ -1,6 +1,5 @@
 """
     email_reply_parser is a python library port of GitHub's Email Reply Parser.
-
     For more information, visit https://github.com/zapier/email_reply_parser
 """
 import os
@@ -15,25 +14,24 @@ class EmailReplyParser(object):
         dir_path = os.path.dirname(__file__)
         with open(dir_path + "/languages_support.json", "r") as read_file:
             self.words_map = json.load(read_file)
-        self.language = language
+        if language in self.words_map:
+            self.language = language
+        else:
+            self.language = 'en'
 
     def read(self, text):
         """ Factory method that splits email into list of fragments
-
             text - A string email body
-
             Returns an EmailMessage instance
         """
         return EmailMessage(text, self.language, self.words_map).read()
 
     def parse_reply(self, text):
         """ Provides the reply portion of email.
-
             text - A string email body
-
             Returns reply body message
         """
-        return self.read(text).reply
+        return self.read(text.replace('\xa0', ' ')).reply
 
 
 class EmailMessage(object):
@@ -62,7 +60,7 @@ class EmailMessage(object):
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
-            '):\*? .+|.+(mailto:).+'
+            ')\s*:\*? .+|.+(mailto:).+'
         )
 
     def nl_support(self):
@@ -80,11 +78,13 @@ class EmailMessage(object):
     def fr_support(self):
         self.SIG_REGEX = re.compile(
             r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] \
-            + '(\w+\s*){1,3})|(.*[Cc]ordialement)'
+            + '(\w+\s*){1,3})|(.*(cordialement|bonne r[ée]ception|salutations|cdlt|cdt|crdt|regards|best regard|'
+              'bonne journ[ée]e))',
+            re.IGNORECASE
         )
-        self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
+        self.QUOTE_HDR_REGEX = re.compile('Le.*a écrit.*>:$')
         self.default_quoted_header()
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit.*>:)(Le\s(.+?)a écrit.*>:)'
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
@@ -108,7 +108,6 @@ class EmailMessage(object):
     def read(self):
         """ Creates new fragment for each line
             and labels as a signature, quote, or hidden.
-
             Returns EmailMessage instance
         """
 
@@ -146,7 +145,6 @@ class EmailMessage(object):
 
     def _scan_line(self, line):
         """ Reviews each line in email message and determines fragment type
-
             line - a row of text from an email message
         """
         is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
@@ -169,9 +167,7 @@ class EmailMessage(object):
 
     def quote_header(self, line):
         """ Determines whether line is part of a quoted area
-
             line - a row of the email message
-
             Returns True or False
         """
         return self.QUOTE_HDR_REGEX.match(line[::-1]) is not None
