@@ -51,6 +51,7 @@ class EmailMessage(object):
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = None
         self.words_map = words_map
         self.language = language
+        self.default_language = 'en'
         self.set_regex()
 
     def default_quoted_header(self):
@@ -66,13 +67,11 @@ class EmailMessage(object):
     def nl_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('Op.*schreef.*>:$')
-        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Op.*Op\s.+?schreef.*>:)(Op\s(.+?)schreef.*>:)'
 
     def de_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
-        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
 
     def fr_support(self):
@@ -83,21 +82,26 @@ class EmailMessage(object):
             re.IGNORECASE
         )
         self.QUOTE_HDR_REGEX = re.compile('Le.*a écrit.*>:$')
-        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit.*>:)(Le\s(.+?)a écrit.*>:)'
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
         self.QUOTED_REGEX = re.compile(r'(>+)')
-        self.default_quoted_header()
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+
+    def fi_support(self):
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})')
+        self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
+        self.QUOTED_REGEX = re.compile(r'(>+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
 
     def set_regex(self):
         if hasattr(self, self.language+"_support"):
             getattr(self, self.language+"_support")()
+            self.default_quoted_header()
         else:
-            self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
+            self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from'] + '|' self.words_map[self.default_language]['Sent from'] + ')(\w+\s*){1,3})')
             self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + ':$')
             self.default_quoted_header()
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] + \

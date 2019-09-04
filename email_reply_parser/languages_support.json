@@ -121,11 +121,11 @@
   },
   "fi": {
     "Sent from": "L\u00e4hetetty",
-    "From": "alkaen",
-    "To": "jotta",
+    "From": "L\u00e4hett\u00e4j\u00e4",
+    "To": "Vastaanottaja",
     "wrote": "kirjoitti",
-    "Sent": "L\u00e4hetetyt",
-    "Subject": "aihe"
+    "Sent": "L\u00e4hetetty",
+    "Subject": "Aihe"
   },
   "zh": {
     "Sent from": "\u6765\u81ea",
