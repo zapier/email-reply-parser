@@ -94,7 +94,7 @@ class EmailMessage(object):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
         self.QUOTE_HDR_REGEX = re.compile('(.+?kirjoitti(.+?kello(.+?))?:$)')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?![a-zA-Z0-9.:;<>&@ ]+?kirjoitti(.+?)kirjoitti[a-zA-Z0-9.:;<>&@ ]*:$)([a-zA-Z0-9.:;<>&@ ]+?kirjoitti[a-zA-Z0-9.:;<>&@ ]*:$)'
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!(.+?)kirjoitti(.+?)kirjoitti.*:$)((.+?)kirjoitti.*:$)'
 
     def set_regex(self):
         if hasattr(self, self.language+"_support"):
@@ -119,6 +119,8 @@ class EmailMessage(object):
 
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
+            import code
+            code.interact(local=locals())
             self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
 
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
