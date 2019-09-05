@@ -92,9 +92,9 @@ class EmailMessage(object):
 
     def fi_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
-        self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
+        self.QUOTE_HDR_REGEX = re.compile('.*kirjoitti:$')
         self.QUOTED_REGEX = re.compile(r'(>+)')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+        self._MULTI_QUOTE_HDR_REGEX = r'(.*kirjoitti:)'
 
     def set_regex(self):
         if hasattr(self, self.language+"_support"):
