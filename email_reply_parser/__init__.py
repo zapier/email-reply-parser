@@ -1,6 +1,6 @@
 """
-    email_reply_parser is a python library port of GitHub's Email Reply Parser.
-    For more information, visit https://github.com/zapier/email_reply_parser
+email_reply_parser is a python library port of GitHub's Email Reply Parser.
+For more information, visit https://github.com/zapier/email_reply_parser
 """
 import os
 import re
@@ -91,7 +91,7 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
 
     def fi_support(self):
-        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})')
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
         self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
         self.QUOTED_REGEX = re.compile(r'(>+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
@@ -101,7 +101,7 @@ class EmailMessage(object):
             getattr(self, self.language+"_support")()
             self.default_quoted_header()
         else:
-            self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from'] + '|' self.words_map[self.default_language]['Sent from'] + ')(\w+\s*){1,3})')
+            self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from'] + '|' + self.words_map[self.default_language]['Sent from'] + ')(\w+\s*){1,3})')
             self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + ':$')
             self.default_quoted_header()
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] + \
