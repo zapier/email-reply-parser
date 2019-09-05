@@ -24,7 +24,7 @@ class EmailReplyParser(object):
             text - A string email body
             Returns an EmailMessage instance
         """
-        return EmailMessage(text.replace('\xa0', ' '), self.language, self.words_map).read()
+        return EmailMessage(text, self.language, self.words_map).read()
 
     def parse_reply(self, text):
         """ Provides the reply portion of email.
@@ -87,14 +87,14 @@ class EmailMessage(object):
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
-        self.QUOTED_REGEX = re.compile(r'(>+)')
+        self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
 
     def fi_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
-        self.QUOTE_HDR_REGEX = re.compile('.*kirjoitti:$')
-        self.QUOTED_REGEX = re.compile(r'(>+)')
-        self._MULTI_QUOTE_HDR_REGEX = r'(.*kirjoitti:)'
+        self.QUOTE_HDR_REGEX = re.compile('(.*kirjoitti:$)|([a-zA-Z0-9.:;<>& ]+?kirjoitti[a-zA-Z0-9.:;<>& ]+?kello(.+?):$)')
+        self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?![a-zA-Z0-9.:;<>& ]+?kirjoitti(.+?)kirjoitti[a-zA-Z0-9.:;<>& ]*:$)([a-zA-Z0-9.:;<>& ]+?kirjoitti[a-zA-Z0-9.:;<>& ]+?:$)'
 
     def set_regex(self):
         if hasattr(self, self.language+"_support"):
