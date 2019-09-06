@@ -22,18 +22,17 @@ def profile():
     print(f'Total time: {time.time() - ground}')
 
 def verify():
-    parser = EmailReplyParser(language='fr')
+    parser = EmailReplyParser(language='fi')
     texts = json.load(open('test/emails/emails.json'))
     texts = list(filter(lambda d: type(d) == str, texts))
     parsed = []
     for text in texts:
-        # print(text)
+        print('-'*100)
         soup = BeautifulSoup(text, 'lxml')
-        text = soup.getText(' ')
+        text = soup.getText('\n')
+        text = parser.parse_reply(text)
         parsed.append(text)
-        #text = parser.parse_reply(text)
-        #print(text)
+        print(text)
 
 if __name__ == '__main__':
-    # profile()
     verify()

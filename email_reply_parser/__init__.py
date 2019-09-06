@@ -1,6 +1,6 @@
 """
-    email_reply_parser is a python library port of GitHub's Email Reply Parser.
-    For more information, visit https://github.com/zapier/email_reply_parser
+email_reply_parser is a python library port of GitHub's Email Reply Parser.
+For more information, visit https://github.com/zapier/email_reply_parser
 """
 import os
 import re
@@ -24,7 +24,7 @@ class EmailReplyParser(object):
             text - A string email body
             Returns an EmailMessage instance
         """
-        return EmailMessage(text.replace('\xa0', ' '), self.language, self.words_map).read()
+        return EmailMessage(text, self.language, self.words_map).read()
 
     def parse_reply(self, text):
         """ Provides the reply portion of email.
@@ -51,12 +51,13 @@ class EmailMessage(object):
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = None
         self.words_map = words_map
         self.language = language
+        self.default_language = 'en'
         self.set_regex()
 
     def default_quoted_header(self):
         self.QUOTED_REGEX = re.compile(r'(>+)')
         self.HEADER_REGEX = re.compile(
-            r'^\*?(' + self.words_map[self.language]['From'] +
+            r'^\[* ]?(' + self.words_map[self.language]['From'] +
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
@@ -66,13 +67,11 @@ class EmailMessage(object):
     def nl_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('Op.*schreef.*>:$')
-        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Op.*Op\s.+?schreef.*>:)(Op\s(.+?)schreef.*>:)'
 
     def de_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
-        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
 
     def fr_support(self):
@@ -83,21 +82,26 @@ class EmailMessage(object):
             re.IGNORECASE
         )
         self.QUOTE_HDR_REGEX = re.compile('Le.*a écrit.*>:$')
-        self.default_quoted_header()
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit.*>:)(Le\s(.+?)a écrit.*>:)'
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
-        self.QUOTED_REGEX = re.compile(r'(>+)')
-        self.default_quoted_header()
+        self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+
+    def fi_support(self):
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
+        self.QUOTE_HDR_REGEX = re.compile('(.+?kirjoitti(.+?kello(.+?))?:$)')
+        self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?![a-zA-Z0-9.:;<>&@ ]+?kirjoitti(.+?)kirjoitti[a-zA-Z0-9.:;<>&@ ]*?:$)([a-zA-Z0-9.:;<>&@ ]+?kirjoitti[a-zA-Z0-9.:;<>&@ ]*?:$)'
 
     def set_regex(self):
         if hasattr(self, self.language+"_support"):
             getattr(self, self.language+"_support")()
+            self.default_quoted_header()
         else:
-            self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
+            self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from'] + '|' + self.words_map[self.default_language]['Sent from'] + ')(\w+\s*){1,3})')
             self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + ':$')
             self.default_quoted_header()
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] + \
@@ -151,7 +155,6 @@ class EmailMessage(object):
         is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
-
         if self.fragment:
             if self.SIG_REGEX.match(line.strip()):
                 self.fragment.signature = True
