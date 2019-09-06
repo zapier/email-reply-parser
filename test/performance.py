@@ -27,13 +27,12 @@ def verify():
     texts = list(filter(lambda d: type(d) == str, texts))
     parsed = []
     for text in texts:
-        if text.startswith('Kiitos'):
-            print('-'*100)
-            soup = BeautifulSoup(text, 'lxml')
-            text = soup.getText('\n')
-            text = parser.parse_reply(text)
-            parsed.append(text)
-            print(text)
+        print('-'*100)
+        soup = BeautifulSoup(text, 'lxml')
+        text = soup.getText('\n')
+        text = parser.parse_reply(text)
+        parsed.append(text)
+        print(text)
 
 if __name__ == '__main__':
     verify()

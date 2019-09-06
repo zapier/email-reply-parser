@@ -119,9 +119,6 @@ class EmailMessage(object):
 
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
-            print('-'*100 + '\nMULTI_QUOTE_HDR_REGEX_MULTILINE\n' + '-'*100)
-            import code
-            code.interact(local=locals())
             self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
 
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
@@ -158,9 +155,6 @@ class EmailMessage(object):
         is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
-        if is_quote_header:
-            import code
-            code.interact(local=locals())
         if self.fragment:
             if self.SIG_REGEX.match(line.strip()):
                 self.fragment.signature = True
