@@ -57,7 +57,7 @@ class EmailMessage(object):
     def default_quoted_header(self):
         self.QUOTED_REGEX = re.compile(r'(>+)')
         self.HEADER_REGEX = re.compile(
-            r'^\*?(' + self.words_map[self.language]['From'] +
+            r'^\[* ]?(' + self.words_map[self.language]['From'] +
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
@@ -94,7 +94,7 @@ class EmailMessage(object):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
         self.QUOTE_HDR_REGEX = re.compile('(.+?kirjoitti(.+?kello(.+?))?:$)')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!(.+?)kirjoitti(.+?)kirjoitti.*:$)((.+?)kirjoitti.*:$)'
+        self._MULTI_QUOTE_HDR_REGEX = r'(?![a-zA-Z0-9.:;<>&@ ]+?kirjoitti(.+?)kirjoitti[a-zA-Z0-9.:;<>&@ ]*?:$)([a-zA-Z0-9.:;<>&@ ]+?kirjoitti[a-zA-Z0-9.:;<>&@ ]*?:$)'
 
     def set_regex(self):
         if hasattr(self, self.language+"_support"):
@@ -119,6 +119,7 @@ class EmailMessage(object):
 
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
+            print('-'*100 + '\nMULTI_QUOTE_HDR_REGEX_MULTILINE\n' + '-'*100)
             import code
             code.interact(local=locals())
             self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
@@ -157,7 +158,9 @@ class EmailMessage(object):
         is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
-
+        if is_quote_header:
+            import code
+            code.interact(local=locals())
         if self.fragment:
             if self.SIG_REGEX.match(line.strip()):
                 self.fragment.signature = True
