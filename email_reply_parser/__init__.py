@@ -86,7 +86,7 @@ class EmailMessage(object):
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
-        self.QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
+        self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote:$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
 
@@ -129,7 +129,7 @@ class EmailMessage(object):
 
         for line in self.lines:
             if line.strip():
-                self._scan_line(line)
+                self._scan_line(line.strip())
 
         self._finish_fragment()
 
