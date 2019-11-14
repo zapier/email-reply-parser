@@ -57,7 +57,7 @@ class EmailMessage(object):
     def default_quoted_header(self):
         self.QUOTED_REGEX = re.compile(r'(>+)')
         self.HEADER_REGEX = re.compile(
-            r'^\[* ]?(' + self.words_map[self.language]['From'] +
+            r'^[* ]?(' + self.words_map[self.language]['From'] +
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
@@ -143,7 +143,7 @@ class EmailMessage(object):
         """
         reply = []
         for f in self.fragments:
-            if not (f.hidden or f.quoted):
+            if not (f.hidden or f.quoted or f.signature):
                 reply.append(f.content)
         return '\n'.join(reply)
 
