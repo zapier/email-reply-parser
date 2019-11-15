@@ -132,7 +132,6 @@ class EmailMessage(object):
                 self._scan_line(line.strip())
 
         self._finish_fragment()
-
         self.fragments.reverse()
 
         return self
@@ -155,8 +154,9 @@ class EmailMessage(object):
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
         if self.fragment and self.SIG_REGEX.match(line.strip()):
-                self.fragment.signature = True
-                self.fragment.lines.append(line)
+            self.fragment.signature = True
+            self.fragment.lines.append(line)
+            self._finish_fragment()
         elif self.fragment \
                 and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
                          (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
