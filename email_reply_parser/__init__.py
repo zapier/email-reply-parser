@@ -57,7 +57,7 @@ class EmailMessage(object):
     def default_quoted_header(self):
         self.QUOTED_REGEX = re.compile(r'(>+)')
         self.HEADER_REGEX = re.compile(
-            r'^\[* ]?(' + self.words_map[self.language]['From'] +
+            r'^[* ]?(' + self.words_map[self.language]['From'] +
             '|' + self.words_map[self.language]['Sent'] +
             '|' + self.words_map[self.language]['To'] +
             '|' + self.words_map[self.language]['Subject'] +
@@ -85,7 +85,7 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit.*>:)(Le\s(.+?)a écrit.*>:)'
 
     def en_support(self):
-        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from (\w+\s*){1,6})')
         self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote:$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
@@ -143,7 +143,7 @@ class EmailMessage(object):
         """
         reply = []
         for f in self.fragments:
-            if not (f.hidden or f.quoted):
+            if not (f.hidden or f.quoted or f.signature):
                 reply.append(f.content)
         return '\n'.join(reply)
 
@@ -154,15 +154,12 @@ class EmailMessage(object):
         is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
-        if self.fragment:
-            if self.SIG_REGEX.match(line.strip()):
+        if self.fragment and self.SIG_REGEX.match(line.strip()):
                 self.fragment.signature = True
-                self._finish_fragment()
-
-        if self.fragment \
+                self.fragment.lines.append(line)
+        elif self.fragment \
                 and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
                          (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
-
             self.fragment.lines.append(line)
         else:
             self._finish_fragment()
