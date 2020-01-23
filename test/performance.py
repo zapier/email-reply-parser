@@ -49,5 +49,26 @@ def parse_df():
     import code
     code.interact(local=locals())
 
+def parse_json():
+    parser = EmailReplyParser(language='en')
+    with open('english.json', 'rb') as fl:
+        messages = json.load(fl)
+    parsed = []
+    for text in messages:
+        soup = BeautifulSoup(text, 'lxml')
+        text = soup.getText('\n')
+        text = parser.parse_reply(text)
+        parsed.append(text)
+    import code
+    code.interact(local=locals())
+
+def parse_text():
+    parser = EmailReplyParser(language='en')
+    with open('test/emails/caution.txt', 'r') as fl:
+        message = fl.read()
+    text = parser.parse_reply(message)
+    print(text)
+
 if __name__ == '__main__':
-    parse_df()
+    parse_text()
+    # parse_text()
