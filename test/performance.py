@@ -64,11 +64,11 @@ def parse_json():
 
 def parse_text():
     parser = EmailReplyParser(language='en')
-    with open('test/emails/email_1_6.txt', 'r') as fl:
+    with open('test/emails/caution.txt', 'r') as fl:
         message = fl.read()
     text = parser.parse_reply(message)
     print(text)
 
 if __name__ == '__main__':
-    parse_json()
+    parse_text()
     # parse_text()

@@ -64,6 +64,9 @@ class EmailMessage(object):
             ')\s*:\*? .+|.+(mailto:).+'
         )
 
+    def warnings(self):
+        self.WARNING_REGEX = re.compile(r'CAUTION: [a-zA-Z0-9.,?!\' ]*')
+
     def nl_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
         self.QUOTE_HDR_REGEX = re.compile('Op.*schreef.*>:$')
@@ -106,6 +109,7 @@ class EmailMessage(object):
             self.default_quoted_header()
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] + \
                                           ':)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
+        self.warnings()
         self.MULTI_QUOTE_HDR_REGEX = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL)
 
@@ -123,6 +127,7 @@ class EmailMessage(object):
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
         #   See email_2_2.txt for an example
         self.text = re.sub('([^\n])(?=\n ?[_-]{7,})', '\\1\n', self.text, re.MULTILINE)
+        self.text = re.sub(self.WARNING_REGEX, '\n', self.text)
 
         self.lines = self.text.split('\n')
         self.lines.reverse()
