@@ -65,7 +65,7 @@ class EmailMessage(object):
         )
 
     def warnings(self):
-        self.WARNING_REGEX = re.compile(r'(CAUTION:|Confidentiality Notice:|Please do not reply|This electronic mail) [a-zA-Z0-9.,?!-()@\' ]*')
+        self.WARNING_REGEX = re.compile(r'(CAUTION:|Confidentiality Notice:|Please do not reply|This electronic mail) [a-zA-Z0-9.,?!()@/\' \-]*')
 
     def nl_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
