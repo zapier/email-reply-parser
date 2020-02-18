@@ -1,0 +1,12 @@
+Hello,
+
+I am trying to place an order and it keeps tell me my order cannot be processed at this time. I tried using two different consultants and it still won't work. I am not sure if it's a technical problem.  My order is time sensitive. Thank you for your help!
+
+Person Person.
+
+
+Disclaimer
+
+The information contained in this communication from the sender is confidential. It is intended solely for use by the recipient and others authorized to receive it. If you are not the recipient, you are hereby notified that any disclosure, copying, distribution or taking action in relation of the contents of this information is strictly prohibited and may be unlawful.
+
+This email has been scanned for viruses and malware, and may have been automatically archived by Thing Ltd, an innovator in Software as a Service (SaaS) for business. Providing a safer and more useful place for your human generated data. Specializing in; Security, archiving and compliance. To find out more Click Here (http://www.thisthat.com/things/) .
