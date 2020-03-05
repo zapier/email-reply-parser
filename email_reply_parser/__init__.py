@@ -65,7 +65,7 @@ class EmailMessage(object):
         )
 
     def warnings(self):
-        self.WARNING_REGEX = re.compile(r'(CAUTION:|Confidentiality Notice:|Please do not reply|This electronic mail|The information contained|This email has been scanned|This message and any associated files|This message is for the recipients|The [cC]ontents are confidential|This communication with its contents) [a-zA-Z0-9:;.,?!()@/\'\"“ \-]*')
+        self.WARNING_REGEX = re.compile(r'(CAUTION:|Confidentiality Notice:|Please do not reply|This electronic mail|The information contained|This email has been scanned|This message and any associated files|This message is for the recipients|The [cC]ontents are confidential|This communication with its contents) [a-zA-Z0-9:;.,?!()@/\'\"\“\” \-]*')
 
     def nl_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
@@ -123,13 +123,11 @@ class EmailMessage(object):
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
             self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
-
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
         #   See email_2_2.txt for an example
         self.text = re.sub('([^\n])(?=\n ?[_-]{7,})', '\\1\n', self.text, re.MULTILINE)
 
         self.text = re.sub(self.WARNING_REGEX, '\n', self.text)
-
         self.lines = self.text.split('\n')
         self.lines.reverse()
 
