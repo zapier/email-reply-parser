@@ -1,0 +1,22 @@
+Hi, I want to cancel my order, could you recall the package and return it? Thank you
+
+发件人: ""xyz.com"" <customerservice@xyz.com>
+日期: 2020年3月6日 星期五 上午1:04
+收件人: ""zys@hotmail.com"" <zys@hotmail.com>
+主题: xyz.com - Order <111111111> has been shipped
+
+Shipping Confirmation
+
+Dear XYZ ZUS,
+
+Thank you for shopping at ZYS!
+
+Your order has been shipped. Your shipment details are shown below.
+
+Please note that it may take up to 24 hours for the shipping carrier to update the tracking information.
+
+If you have any questions you can contact us at
+
+ORDER
+
+SHIPPING

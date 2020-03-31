@@ -129,9 +129,9 @@
   },
   "zh": {
     "Sent from": "\u6765\u81ea",
-    "From": "\u4ece",
-    "To": "\u81f3",
-    "wrote": "\u5199",
+    "From": "\u4ece|\u53d1\u4ef6\u4eba",
+    "To": "\u81f3|\u6536\u4ef6\u4eba",
+    "wrote": "\u5199|\u5199\u9053",
     "Sent": "\u53d1\u9001",
     "Subject": "\u5b66\u79d1"
   },

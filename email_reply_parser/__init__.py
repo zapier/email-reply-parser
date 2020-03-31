@@ -108,7 +108,7 @@ class EmailMessage(object):
             self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + ':$')
             self.default_quoted_header()
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] + \
-                                          ':)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
+                                          '\s*:\s*)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
         self.warnings()
         self.MULTI_QUOTE_HDR_REGEX = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL)
