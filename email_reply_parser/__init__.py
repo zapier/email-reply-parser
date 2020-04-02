@@ -122,8 +122,6 @@ class EmailMessage(object):
         self.found_visible = False
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
-            import code
-            code.interact(local=locals())
             self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
         #   See email_2_2.txt for an example
