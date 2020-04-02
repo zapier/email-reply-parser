@@ -84,14 +84,14 @@ class EmailMessage(object):
               'bonne journ[ée]e))',
             re.IGNORECASE
         )
-        self.QUOTE_HDR_REGEX = re.compile('Le.*a écrit.*>:$')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit.*>:)(Le\s(.+?)a écrit.*>:)'
+        self.QUOTE_HDR_REGEX = re.compile('Le.*a écrit.*[> ]:$')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit[a-zA-Z0-9.:;<>()&@ ]*:)(Le\s(.+?)a écrit[a-zA-Z0-9.:;<>()&@ ]*:)'
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from (\w+\s*){1,6})')
-        self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote:$')
+        self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote\s*:$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
 
     def fi_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
@@ -122,6 +122,8 @@ class EmailMessage(object):
         self.found_visible = False
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
+            import code
+            code.interact(local=locals())
             self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
         #   See email_2_2.txt for an example
