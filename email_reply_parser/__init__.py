@@ -85,7 +85,7 @@ class EmailMessage(object):
             re.IGNORECASE
         )
         self.QUOTE_HDR_REGEX = re.compile('Le.*a écrit.*[> ]:$')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit[a-zA-Z0-9.:;<>()&@ ]*:)(Le\s(.+?)a écrit[a-zA-Z0-9.:;<>()&@ ]*:)'
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit[a-zA-Z0-9.:;<>()&@ -]*:)(Le\s(.+?)a écrit[a-zA-Z0-9.:;<>()&@ -]*:)'
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from (\w+\s*){1,6})')
@@ -93,11 +93,17 @@ class EmailMessage(object):
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
 
+    def ja_support(self):
+        self.SIG_REGEX = re.compile(r'--|__|-\w')
+        self.QUOTE_HDR_REGEX = re.compile(r'[0-9]*年[0-9]*月[0-9]*日[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF\u2605-\u2606\u2190-\u2195\u203Ba-zA-Z0-9.:;<>()&@ -]*:?$')
+        self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)' # Dummy multiline: doesnt work for japanese due to BeautifulSoup insreting new lines before ":" character
+
     def fi_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
         self.QUOTE_HDR_REGEX = re.compile('(.+?kirjoitti(.+?kello.+?)?:)')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?kirjoitti.+?kirjoitti[a-zA-Z0-9.:;<>()&@ ]*:$)((.+?)kirjoitti[a-zA-Z0-9.:;<>()&@ ]*:$)'
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?kirjoitti.+?kirjoitti[a-zA-Z0-9.:;<>()&@ -]*:$)((.+?)kirjoitti[a-zA-Z0-9.:;<>()&@ -]*:$)'
 
     def set_regex(self):
         if hasattr(self, self.language+"_support"):
@@ -105,7 +111,7 @@ class EmailMessage(object):
             self.default_quoted_header()
         else:
             self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from'] + '|' + self.words_map[self.default_language]['Sent from'] + ')(\w+\s*){1,3})')
-            self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + ':$')
+            self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + '\s?:$')
             self.default_quoted_header()
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] + \
                                           '\s*:\s*)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
