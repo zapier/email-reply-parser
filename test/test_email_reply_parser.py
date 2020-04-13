@@ -232,17 +232,17 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue(re.match('^On 9 Jan 2014', message.fragments[1].content))
 
         self.assertEqual(
-            [False, True, False],
+            [False, True],
             [fragment.quoted for fragment in message.fragments]
         )
 
         self.assertEqual(
-            [False, False, False],
+            [False, False],
             [fragment.signature for fragment in message.fragments]
         )
 
         self.assertEqual(
-            [False, True, True],
+            [False, True],
             [fragment.hidden for fragment in message.fragments]
         )
 

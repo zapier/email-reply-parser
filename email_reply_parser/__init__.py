@@ -47,7 +47,7 @@ class EmailMessage(object):
     def __init__(self, text):
         self.fragments = []
         self.fragment = None
-        self.text = text.replace('\r\n', '\n')
+        self.text = '\n'.join(text.splitlines())
         self.found_visible = False
 
     def read(self):
