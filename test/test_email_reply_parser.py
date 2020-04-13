@@ -123,6 +123,39 @@ class EmailMessageTest(unittest.TestCase):
             [f.hidden for f in message.fragments]
         )
 
+    def test_quote_not_quoted(self):
+        '''Original email is not quoted at all.
+
+        Seen in Yahoo! Mail (April 2020) with plain text reply.
+        '''
+
+        message = self.get_email('email_1_10')
+
+        self.assertEqual(
+            3,
+            len(message.fragments)
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.quoted for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.signature for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, False],
+            [f.headers for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, True],
+            [f.hidden for f in message.fragments]
+        )
+
     def test_verify_reads_signature_correct(self):
         message = self.get_email('correct_sig')
         self.assertEqual(2, len(message.fragments))
