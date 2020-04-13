@@ -90,6 +90,39 @@ class EmailMessageTest(unittest.TestCase):
 
         self.assertEqual(1, len(message.fragments))
 
+    def test_whitespace_before_header(self):
+        '''Header has whitespace at the beginning of the line.
+
+        Seen in Yahoo! Mail (April 2020) with rich text reply.
+        '''
+
+        message = self.get_email('email_1_9')
+
+        self.assertEqual(
+            3,
+            len(message.fragments)
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.quoted for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.signature for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, False],
+            [f.headers for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, True],
+            [f.hidden for f in message.fragments]
+        )
+
     def test_verify_reads_signature_correct(self):
         message = self.get_email('correct_sig')
         self.assertEqual(2, len(message.fragments))
