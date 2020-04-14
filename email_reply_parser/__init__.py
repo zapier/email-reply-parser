@@ -100,14 +100,14 @@ class EmailMessage(object):
         is_quoted = self.QUOTED_REGEX.match(stripped_line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(stripped_line) is not None
 
-        if self.fragment and len(line.strip()) == 0:
+        if self.fragment and len(stripped_line) == 0:
             if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
                 self.fragment.signature = True
                 self._finish_fragment()
 
         if self.fragment \
                 and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
-                         (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
+                         (self.fragment.quoted and (is_quote_header or len(stripped_line) == 0))):
 
             self.fragment.lines.append(line)
         else:
