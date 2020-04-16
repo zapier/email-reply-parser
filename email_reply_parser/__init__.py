@@ -97,8 +97,8 @@ class EmailMessage(object):
         stripped_line = line.strip()
 
         is_quote_header = self.QUOTE_HDR_REGEX.match(stripped_line) is not None
-        is_quoted = self.QUOTED_REGEX.match(stripped_line) is not None
-        is_header = is_quote_header or self.HEADER_REGEX.match(stripped_line) is not None
+        is_quoted = self.QUOTED_REGEX.match(line) is not None
+        is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
 
         if self.fragment and len(stripped_line) == 0:
             if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
