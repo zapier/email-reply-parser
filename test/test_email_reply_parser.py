@@ -123,6 +123,14 @@ class EmailMessageTest(unittest.TestCase):
             [f.hidden for f in message.fragments]
         )
 
+        self.assertEqual(
+            ("Resource popular local capital doctor. "
+             "Wish with think north shoulder stand catch. "
+             "Decade many production food view only green.\n"
+             "\n"
+             "Believe concern floor treatment admit keep maintain put."),
+            message.reply)
+
     def test_quote_not_quoted(self):
         '''Original email is not quoted at all.
 
@@ -155,6 +163,14 @@ class EmailMessageTest(unittest.TestCase):
             [False, True, True],
             [f.hidden for f in message.fragments]
         )
+
+        self.assertEqual(
+            ("Base tax cost environment side. "
+             "May house most director treatment call heavy.\n"
+             "Forward professional woman institution happen. "
+             "Tell girl hope to. "
+             "Wrong perhaps apply anything expert main indeed."),
+            message.reply)
 
     def test_verify_reads_signature_correct(self):
         message = self.get_email('correct_sig')
