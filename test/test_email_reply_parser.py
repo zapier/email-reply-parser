@@ -90,6 +90,129 @@ class EmailMessageTest(unittest.TestCase):
 
         self.assertEqual(1, len(message.fragments))
 
+    def test_whitespace_before_header(self):
+        '''Header has whitespace at the beginning of the line.
+
+        Seen in Yahoo! Mail (April 2020) with rich text reply.
+        '''
+
+        message = self.get_email('email_1_9')
+
+        self.assertEqual(
+            3,
+            len(message.fragments)
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.quoted for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.signature for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, False],
+            [f.headers for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, True],
+            [f.hidden for f in message.fragments]
+        )
+
+        self.assertEqual(
+            ("Resource popular local capital doctor. "
+             "Wish with think north shoulder stand catch. "
+             "Decade many production food view only green.\n"
+             "\n"
+             "Believe concern floor treatment admit keep maintain put."),
+            message.reply)
+
+    def test_quote_not_quoted(self):
+        '''Original email is not quoted at all.
+
+        Seen in Yahoo! Mail (April 2020) with plain text reply.
+        '''
+
+        message = self.get_email('email_1_10')
+
+        self.assertEqual(
+            3,
+            len(message.fragments)
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.quoted for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.signature for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, False],
+            [f.headers for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, True],
+            [f.hidden for f in message.fragments]
+        )
+
+        self.assertEqual(
+            ("Base tax cost environment side. "
+             "May house most director treatment call heavy.\n"
+             "Forward professional woman institution happen. "
+             "Tell girl hope to. "
+             "Wrong perhaps apply anything expert main indeed."),
+            message.reply)
+
+    def test_header_on_multiple_lines(self):
+        '''Header is split into multiple lines
+
+        Seen in GMail (April 2020); line length was 78 fwiw
+        '''
+
+        message = self.get_email('email_1_11')
+
+        self.assertEqual(
+            3,
+            len(message.fragments)
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.quoted for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, False, False],
+            [f.signature for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, False],
+            [f.headers for f in message.fragments]
+        )
+
+        self.assertEqual(
+            [False, True, True],
+            [f.hidden for f in message.fragments]
+        )
+
+        self.assertEqual(
+            ("Admit high represent movement.\n"
+             "Everything car rest perform late either among. "
+             "Available help threat across spring necessary.\n"
+             "Develop line class impact pick generation. "
+             "Join day design simply."),
+            message.reply)
+
     def test_verify_reads_signature_correct(self):
         message = self.get_email('correct_sig')
         self.assertEqual(2, len(message.fragments))
@@ -166,17 +289,17 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue(re.match('^On 9 Jan 2014', message.fragments[1].content))
 
         self.assertEqual(
-            [False, True, False],
+            [False, True],
             [fragment.quoted for fragment in message.fragments]
         )
 
         self.assertEqual(
-            [False, False, False],
+            [False, False],
             [fragment.signature for fragment in message.fragments]
         )
 
         self.assertEqual(
-            [False, True, True],
+            [False, True],
             [fragment.hidden for fragment in message.fragments]
         )
 

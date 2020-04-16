@@ -47,7 +47,7 @@ class EmailMessage(object):
     def __init__(self, text):
         self.fragments = []
         self.fragment = None
-        self.text = text.replace('\r\n', '\n')
+        self.text = '\n'.join(text.splitlines())
         self.found_visible = False
 
     def read(self):
@@ -94,18 +94,20 @@ class EmailMessage(object):
 
             line - a row of text from an email message
         """
-        is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
+        stripped_line = line.strip()
+
+        is_quote_header = self.QUOTE_HDR_REGEX.match(stripped_line) is not None
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
 
-        if self.fragment and len(line.strip()) == 0:
+        if self.fragment and len(stripped_line) == 0:
             if self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
                 self.fragment.signature = True
                 self._finish_fragment()
 
         if self.fragment \
                 and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
-                         (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
+                         (self.fragment.quoted and (is_quote_header or len(stripped_line) == 0))):
 
             self.fragment.lines.append(line)
         else:
