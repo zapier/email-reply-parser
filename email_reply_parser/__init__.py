@@ -89,7 +89,7 @@ class EmailMessage(object):
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from (\w+\s*){1,6})')
-        self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote\s*:$')
+        self.QUOTE_HDR_REGEX = re.compile('\s*(On.*wrote\s*:|This is a follow-up to your previous request.*)$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
 
