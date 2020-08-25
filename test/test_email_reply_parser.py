@@ -123,7 +123,7 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue("You can list the keys for the bucket" in message.reply)
 
     def test_reply_from_gmail(self):
-        with open('test/emails/email_gmail.txt') as f:
+        with open('test/emails/email_gmail.txt',encoding="utf-8") as f:
             self.assertEqual('This is a test for inbox replying to a github message.',
                              EmailReplyParser.parse_reply(f.read()))
 
@@ -136,7 +136,7 @@ class EmailMessageTest(unittest.TestCase):
             self.assertEqual("Outlook with a reply directly above line", EmailReplyParser.parse_reply(f.read()))
 
     def test_parse_out_just_top_for_outlook_with_unusual_headers_format(self):
-        with open('test/emails/email_2_3.txt') as f:
+        with open('test/emails/email_2_3.txt',encoding="utf-8") as f:
             self.assertEqual(
                 "Outlook with a reply above headers using unusual format",
                 EmailReplyParser.parse_reply(f.read()))
@@ -192,14 +192,33 @@ class EmailMessageTest(unittest.TestCase):
     def get_email(self, name):
         """ Return EmailMessage instance
         """
-        with open('test/emails/%s.txt' % name) as f:
+        with open('test/emails/%s.txt' % name,encoding="utf-8") as f:
             text = f.read()
         return EmailReplyParser.read(text)
 
     def test_issue_15(self):              
         message = self.get_email("email_issue_15")
         self.assertEqual('And this is a response to the test response.\nOn function On  wrote:', message.reply)
-        
+    
+    def test_multi_quater_reg(self):
+        test_string='On function On wrote:\nOn Fri, Jan 5, 2018 at 12:39 PM, Adam Taylor <sampleaddress@example.com>\n\
+            wrote: > And this is a test response.\n\
+            >\n\
+            > On Fri, Jan 5, 2018 at 12:34 PM, Adam Taylor <sampleaddress@example.com>\n\
+            > wrote:'
+        wrong_result='On Fri, Jan 5, 2018 at 12:34 PM, Adam Taylor <sampleaddress@example.com>\n\
+            > wrote:'
+        right_result='On Fri, Jan 5, 2018 at 12:39 PM, Adam Taylor <sampleaddress@example.com>\n\
+            wrote:'
+        #the original reg,find the second reply which is at 12:34 PM
+        _MULTI_QUOTE_HDR_REGEX =r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+        MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
+        is_multi_quote_header = MULTI_QUOTE_HDR_REGEX.search(test_string)
+        self.assertEqual(wrong_result,is_multi_quote_header.groups()[0])
+
+        #the new reg,find the first reply and don't get 'On function On wrote:\n'
+        NEW_MULTI_QUOTE_HDR_REGEX=re.compile(r'(On\s((?!\sOn\s).)+\s*wrote:)', re.DOTALL | re.MULTILINE)
+        self.assertEqual(right_result,NEW_MULTI_QUOTE_HDR_REGEX.search(test_string).groups()[0])
         
 if __name__ == '__main__':
     unittest.main()
