@@ -123,7 +123,7 @@ class EmailMessageTest(unittest.TestCase):
         self.assertTrue("You can list the keys for the bucket" in message.reply)
 
     def test_reply_from_gmail(self):
-        with open('test/emails/email_gmail.txt',encoding="utf-8") as f:
+        with open('test/emails/email_gmail.txt') as f:
             self.assertEqual('This is a test for inbox replying to a github message.',
                              EmailReplyParser.parse_reply(f.read()))
 
@@ -192,11 +192,11 @@ class EmailMessageTest(unittest.TestCase):
     def get_email(self, name):
         """ Return EmailMessage instance
         """
-        with open('test/emails/%s.txt' % name,encoding="utf-8") as f:
+        with open('test/emails/%s.txt' % name) as f:
             text = f.read()
         return EmailReplyParser.read(text)
 
-    def test_issue_15(self):
+    def test_issue_15(self):              
         message = self.get_email("email_issue_15")
         self.assertEqual('And this is a response to the test response.', message.fragments[0].content)
         
