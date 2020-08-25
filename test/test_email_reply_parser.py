@@ -198,7 +198,7 @@ class EmailMessageTest(unittest.TestCase):
 
     def test_issue_15(self):              
         message = self.get_email("email_issue_15")
-        self.assertEqual('And this is a response to the test response.', message.fragments[0].content)
+        self.assertEqual('And this is a response to the test response.\nOn function On  wrote:', message.reply)
         
         
 if __name__ == '__main__':
