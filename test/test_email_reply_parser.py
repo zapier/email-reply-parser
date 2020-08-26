@@ -7,6 +7,8 @@ import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from email_reply_parser import EmailReplyParser
+from email_reply_parser import EmailMessage    
+
 
 
 class EmailMessageTest(unittest.TestCase):
@@ -201,7 +203,7 @@ class EmailMessageTest(unittest.TestCase):
         self.assertEqual('And this is a response to the test response.\nOn function On  wrote:', message.reply)
     
     def test_multi_quater_reg(self):
-        test_string='On function On wrote:\nOn Fri, Jan 5, 2018 at 12:39 PM, Adam Taylor <sampleaddress@example.com>\n\
+        test_string='On Fri, Jan 5, 2018 at 12:39 PM, Adam Taylor <sampleaddress@example.com>\n\
             wrote: > And this is a test response.\n\
             >\n\
             > On Fri, Jan 5, 2018 at 12:34 PM, Adam Taylor <sampleaddress@example.com>\n\
@@ -210,15 +212,26 @@ class EmailMessageTest(unittest.TestCase):
             > wrote:'
         right_result='On Fri, Jan 5, 2018 at 12:39 PM, Adam Taylor <sampleaddress@example.com>\n\
             wrote:'
-        #the original reg,find the second reply which is at 12:34 PM
+        #the original reg,find the second reply which is 'at 12:34 PM'
         _MULTI_QUOTE_HDR_REGEX =r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
         MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
         is_multi_quote_header = MULTI_QUOTE_HDR_REGEX.search(test_string)
         self.assertEqual(wrong_result,is_multi_quote_header.groups()[0])
 
-        #the new reg,find the first reply and don't get 'On function On wrote:\n'
-        NEW_MULTI_QUOTE_HDR_REGEX=re.compile(r'(On\s((?!\sOn\s).)+wrote:)', re.DOTALL | re.MULTILINE)
+        #the new reg,find the first reply 
+        # r'(\bOn\s((?!\bOn\b).){2,100}wrote:)'
+        NEW_MULTI_QUOTE_HDR_REGEX=re.compile(EmailMessage._MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
         self.assertEqual(right_result,NEW_MULTI_QUOTE_HDR_REGEX.search(test_string).groups()[0])
+        
+        #test greedy case, don't get 'On functiOn On wrote:\n'
+        greedy_string=' '.join(['On functiOn On wrote:\n',test_string])
+        self.assertEqual(wrong_result,MULTI_QUOTE_HDR_REGEX.search(greedy_string).groups()[0])
+        self.assertEqual(right_result,NEW_MULTI_QUOTE_HDR_REGEX.search(greedy_string).groups()[0])
+        
+        #test On, On
+        greedy_string_more=' '.join([' On functiOn with an other On, On wrote: ',test_string])
+        self.assertEqual(wrong_result,MULTI_QUOTE_HDR_REGEX.search(greedy_string_more).groups()[0])
+        self.assertEqual(right_result,NEW_MULTI_QUOTE_HDR_REGEX.search(greedy_string_more).groups()[0])
         
 if __name__ == '__main__':
     unittest.main()
