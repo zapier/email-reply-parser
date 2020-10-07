@@ -11,7 +11,7 @@ script: python setup.py test
 deploy:
   edge: true
   provider: pypi
-  user: kageurufu
+  user: __token__
   distributions: sdist bdist_wheel
   on:
     tags: true
