@@ -6,6 +6,7 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
+  - "3.9"
   - "pypy"
 script: python setup.py test
 deploy:
@@ -13,6 +14,8 @@ deploy:
   provider: pypi
   user: __token__
   distributions: sdist bdist_wheel
+  skip_existing: true
   on:
     tags: true
     repo: zapier/email-reply-parser
+    python: 3.9
