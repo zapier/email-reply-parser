@@ -9,11 +9,10 @@ python:
   - "pypy"
 script: python setup.py test
 deploy:
+  edge: true
   provider: pypi
-  user: zapier
-  password:
-    secure: fT6o+OLSLfeA9F0IJLWpN/viId9x7rO++5srN3bZRl5x/MiFDXnYEZRKtV8zZCpMfrXgkFAMJWaxh4etYyfe/BoIZN5iY41uiQakrfKpHHaTsThVvTed5LfJDO0OPojAnyQsXkdaPKefL4F+can3znNZNednQQc/i2F52y9eSUE=
+  user: kageurufu
+  distributions: sdist bdist_wheel
   on:
     tags: true
-    distributions: sdist bdist_wheel
     repo: zapier/email-reply-parser
