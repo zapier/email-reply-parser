@@ -37,10 +37,10 @@ class EmailMessage(object):
     """
 
     SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from my (\w+\s*){1,3})')
-    QUOTE_HDR_REGEX = re.compile('On.*wrote:$')
+    QUOTE_HDR_REGEX = re.compile('On\s((?!\sOn\s).)+wrote:\s*$')
     QUOTED_REGEX = re.compile(r'(>+)')
     HEADER_REGEX = re.compile(r'^\*?(From|Sent|To|Subject):\*? .+')
-    _MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)'
+    _MULTI_QUOTE_HDR_REGEX =r'(\bOn\s((?!\bOn\b).){2,100}wrote:)'
     MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
     MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(_MULTI_QUOTE_HDR_REGEX, re.DOTALL)
 
