@@ -142,7 +142,7 @@ class EmailMessage(object):
             and labels as a signature, quote, or hidden.
             Returns EmailMessage instance
         """
-
+        self.text = self.text.strip()
         self.found_visible = False
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
