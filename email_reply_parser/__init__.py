@@ -57,11 +57,11 @@ class EmailMessage(object):
     def default_quoted_header(self):
         self.QUOTED_REGEX = re.compile(r'(>+)')
         self.HEADER_REGEX = re.compile(
-            r'^[* ]?(' + self.words_map[self.language]['From'] +
-            '|' + self.words_map[self.language]['Sent'] +
-            '|' + self.words_map[self.language]['To'] +
-            '|' + self.words_map[self.language]['Subject'] +
-            ')\s*:\*? .+|.+(mailto:).+'
+            r'^[* ]?(' + self.words_map[self.language]['From'] \
+            + '|' + self.words_map[self.language]['Sent'] \
+            + '|' + self.words_map[self.language]['To'] \
+            + '|' + self.words_map[self.language]['Subject'] \
+            + ')\s*:\*? .+|.+(mailto:).+'
         )
 
     def warnings(self):
@@ -90,7 +90,7 @@ class EmailMessage(object):
 
     def fr_support(self):
         self.SIG_REGEX = re.compile(
-            r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from']
+            r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] \
             + '(\w+\s*){1,3})|(.*(cordialement|bonne r[ée]ception|salutations'
             r'|cdlt|cdt|crdt|regards|best regard|bonne journ[ée]e))',
             re.IGNORECASE
@@ -124,13 +124,13 @@ class EmailMessage(object):
             self.default_quoted_header()
         else:
             self.SIG_REGEX = re.compile(
-                r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from']
-                + '|' + self.words_map[self.default_language]['Sent from']
+                r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from'] \
+                + '|' + self.words_map[self.default_language]['Sent from'] \
                 + ')(\w+\s*){1,3})'
             )
             self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + '\s?:$')
             self.default_quoted_header()
-            self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote']
+            self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] \
                 + '\s*:\s*)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
         self.warnings()
         self.MULTI_QUOTE_HDR_REGEX = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
