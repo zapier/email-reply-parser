@@ -100,7 +100,7 @@ class EmailMessage(object):
 
     def en_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from (\w+\s*){1,6})')
-        self.QUOTE_HDR_REGEX = re.compile('\s*(On.*wrote\s*:|This is a follow-up to your previous request.*)$')
+        self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote\s*:$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
 
@@ -133,6 +133,7 @@ class EmailMessage(object):
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] \
                 + '\s*:\s*)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
         self.warnings()
+        self.FOLLOW_UP_HDR_REGEX = re.compile(r'(?<!^)This is a follow-up to your previous request.*', re.DOTALL)
         self.MULTI_QUOTE_HDR_REGEX = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL)
 
@@ -146,6 +147,7 @@ class EmailMessage(object):
         is_multi_quote_header = self.MULTI_QUOTE_HDR_REGEX_MULTILINE.search(self.text)
         if is_multi_quote_header:
             self.text = self.MULTI_QUOTE_HDR_REGEX.sub(is_multi_quote_header.groups()[0].replace('\n', ''), self.text)
+        self.text = self.FOLLOW_UP_HDR_REGEX.sub('', self.text)
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
         #   See email_2_2.txt for an example
         self.text = re.sub('([^\n])(?=\n ?[_-]{7,})', '\\1\n', self.text, re.MULTILINE)
@@ -191,13 +193,6 @@ class EmailMessage(object):
         else:
             self._finish_fragment()
             self.fragment = Fragment(is_quoted, line, headers=is_header)
-
-    def quote_header(self, line):
-        """ Determines whether line is part of a quoted area
-            line - a row of the email message
-            Returns True or False
-        """
-        return self.QUOTE_HDR_REGEX.match(line[::-1]) is not None
 
     def _finish_fragment(self):
         """ Creates fragment
