@@ -59,8 +59,7 @@ class EmailMessage(object):
         self.HEADER_REGEX = re.compile(
             r'^[* ]?(' + self.words_map[self.language]['From'] \
             + '|' + self.words_map[self.language]['Sent'] \
-            + '|' + self.words_map[self.language]['To'] \
-            + '|' + self.words_map[self.language]['Subject'] \
+            + '|' + self.words_map[self.language]['To']
             + ')\s*:\*? .+|.+(mailto:).+'
         )
 
@@ -68,6 +67,8 @@ class EmailMessage(object):
         self.WARNING_REGEX = re.compile(
             r'(CAUTION:|NOTICE:|Confidentiality Notice:|Please do not reply|This electronic mail'
             r'|Disclaimer: This message is intended'
+            r'|This message and any attachments are solely'
+            r'|This email contains privileged information'
             r'|The information contained|This email has been scanned|This message and any associated files'
             r'|This email and any files transmitted|This message is for the recipients'
             r'|The information provided within this communication'
