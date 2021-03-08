@@ -105,6 +105,11 @@ class EmailMessage(object):
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
 
+    def es_support(self):
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Enviado desde (\w+\s*){1,6})')
+        self.QUOTE_HDR_REGEX = re.compile('\s*El.*escribió\s*:$')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!El.*El\s.+?escribió\s*:)(El\s(.+?)escribió\s*:)'
+
     def ja_support(self):
         self.SIG_REGEX = re.compile(r'--|__|-\w')
         self.QUOTE_HDR_REGEX = re.compile(
