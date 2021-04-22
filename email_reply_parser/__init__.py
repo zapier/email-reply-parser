@@ -10,6 +10,7 @@ import json
 class EmailReplyParser(object):
     """ Represents a email message that is parsed.
     """
+
     def __init__(self, language='en'):
         dir_path = os.path.dirname(__file__)
         with open(dir_path + "/languages_support.json", "r") as read_file:
@@ -37,6 +38,7 @@ class EmailReplyParser(object):
 class EmailMessage(object):
     """ An email message represents a parsed email body.
     """
+
     def __init__(self, text, language, words_map):
         self.fragments = []
         self.fragment = None
@@ -57,10 +59,10 @@ class EmailMessage(object):
     def default_quoted_header(self):
         self.QUOTED_REGEX = re.compile(r'(>+)')
         self.HEADER_REGEX = re.compile(
-            r'^[* ]?(' + self.words_map[self.language]['From'] \
-            + '|' + self.words_map[self.language]['Sent'] \
+            r'^[* ]*(' + self.words_map[self.language]['From']
+            + '|' + self.words_map[self.language]['Sent']
             + '|' + self.words_map[self.language]['To']
-            + ')\s*:\*? .+|.+(mailto:).+'
+            + ')\s*:\** .+|.+(mailto:).+'
         )
 
     def warnings(self):
@@ -93,7 +95,7 @@ class EmailMessage(object):
         self.SIG_REGEX = re.compile(
             r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] \
             + '(\w+\s*){1,3})|(.*(cordialement|bonne r[ée]ception|salutations'
-            r'|cdlt|cdt|crdt|regards|best regard|bonne journ[ée]e))',
+              r'|cdlt|cdt|crdt|regards|best regard|bonne journ[ée]e))',
             re.IGNORECASE
         )
         self.QUOTE_HDR_REGEX = re.compile('Le.*a écrit.*[> ]:$')
@@ -116,7 +118,7 @@ class EmailMessage(object):
             r'[0-9]*年[0-9]*月[0-9]*日[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF\u2605-\u2606\u2190-\u2195\u203Ba-zA-Z0-9.:;<>()&@ -]*:?$'
         )
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)' # Dummy multiline: doesnt work for japanese due to BeautifulSoup insreting new lines before ":" character
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'  # Dummy multiline: doesnt work for japanese due to BeautifulSoup insreting new lines before ":" character
 
     def fi_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Lähetetty (\w+\s*){1,3})|(^Hanki Outlook for.*)')
@@ -125,8 +127,8 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?kirjoitti.+?kirjoitti[a-zA-Z0-9.:;<>()&@ -]*:$)((.+?)kirjoitti[a-zA-Z0-9.:;<>()&@ -]*:$)'
 
     def set_regex(self):
-        if hasattr(self, self.language+"_support"):
-            getattr(self, self.language+"_support")()
+        if hasattr(self, self.language + "_support"):
+            getattr(self, self.language + "_support")()
             self.default_quoted_header()
         else:
             self.SIG_REGEX = re.compile(
@@ -137,7 +139,7 @@ class EmailMessage(object):
             self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + '\s?:$')
             self.default_quoted_header()
             self._MULTI_QUOTE_HDR_REGEX = r'(?!.+?' + self.words_map[self.language]['wrote'] \
-                + '\s*:\s*)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
+                                          + '\s*:\s*)(On\s(.+?)' + self.words_map[self.language]['wrote'] + ':)'
         self.warnings()
         self.FOLLOW_UP_HDR_REGEX = re.compile(r'(?<!^)This is a follow-up to your previous request.*', re.DOTALL)
         self.MULTI_QUOTE_HDR_REGEX = re.compile(self._MULTI_QUOTE_HDR_REGEX, re.DOTALL | re.MULTILINE)
@@ -194,7 +196,7 @@ class EmailMessage(object):
             self._finish_fragment()
         elif self.fragment \
                 and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
-                         (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
+                     (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
             self.fragment.lines.append(line)
         else:
             self._finish_fragment()
