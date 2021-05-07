@@ -64,7 +64,7 @@ class EmailMessage(object):
             r'^[* ]*(' + self.words_map[self.language]['From']
             + '|' + self.words_map[self.language]['Sent']
             + '|' + self.words_map[self.language]['To']
-            + ')\s*:\s*.*|.+(mailto:).+',
+            + ')\s*:\s*\**.*|.+(mailto:).+'
         )
 
     def warnings(self):
