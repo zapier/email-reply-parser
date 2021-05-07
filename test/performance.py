@@ -5,6 +5,7 @@ import time
 from bs4 import BeautifulSoup  # requires lxml
 from email_reply_parser import EmailReplyParser
 
+
 def profile():
     df = pd.read_csv('test.csv')
     ground = time.time()
@@ -21,6 +22,7 @@ def profile():
     print(str(time.time() - start) + 'soup')
     print(f'Total time: {time.time() - ground}')
 
+
 def verify():
     parser = EmailReplyParser(language='fi')
     texts = json.load(open('test/emails/emails.json'))
@@ -33,6 +35,7 @@ def verify():
         text = parser.parse_reply(text)
         parsed.append(text)
         print(text)
+
 
 def parse_df():
     parser = EmailReplyParser(language='en')
@@ -49,6 +52,7 @@ def parse_df():
     import code
     code.interact(local=locals())
 
+
 def parse_json():
     parser = EmailReplyParser(language='en')
     with open('english.json', 'rb') as fl:
@@ -62,12 +66,14 @@ def parse_json():
     import code
     code.interact(local=locals())
 
+
 def parse_text():
     parser = EmailReplyParser(language='en')
     with open('test/emails/caution.txt', 'r') as fl:
         message = fl.read()
     text = parser.parse_reply(message)
     print(text)
+
 
 if __name__ == '__main__':
     parse_text()

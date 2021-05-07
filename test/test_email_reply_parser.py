@@ -70,7 +70,6 @@ class EmailMessageTest(unittest.TestCase):
 
     def test_reads_top_post(self):
         message = self.get_email('email_1_3')
-
         self.assertEqual(5, len(message.fragments))
 
     def test_multiline_reply_headers(self):
@@ -125,30 +124,31 @@ class EmailMessageTest(unittest.TestCase):
     def test_reply_from_gmail(self):
         with open('test/emails/email_gmail.txt') as f:
             self.assertEqual('This is a test for inbox replying to a github message.',
-                             EmailReplyParser.parse_reply(f.read()))
+                             EmailReplyParser().parse_reply(f.read()))
 
     def test_parse_out_just_top_for_outlook_reply(self):
         with open('test/emails/email_2_1.txt') as f:
-            self.assertEqual("Outlook with a reply", EmailReplyParser.parse_reply(f.read()))
+            self.assertEqual("Outlook with a reply", EmailReplyParser().parse_reply(f.read()))
 
     def test_parse_out_just_top_for_outlook_with_reply_directly_above_line(self):
         with open('test/emails/email_2_2.txt') as f:
-            self.assertEqual("Outlook with a reply directly above line", EmailReplyParser.parse_reply(f.read()))
+            self.assertEqual("Outlook with a reply directly above line", EmailReplyParser().parse_reply(f.read()))
 
     def test_parse_out_just_top_for_outlook_with_unusual_headers_format(self):
         with open('test/emails/email_2_3.txt') as f:
             self.assertEqual(
                 "Outlook with a reply above headers using unusual format",
-                EmailReplyParser.parse_reply(f.read()))
+                EmailReplyParser().parse_reply(f.read()))
 
     def test_sent_from_iphone(self):
         with open('test/emails/email_iPhone.txt') as email:
-            self.assertTrue("Sent from my iPhone" not in EmailReplyParser.parse_reply(email.read()))
+
+            self.assertTrue("Sent from my iPhone" not in EmailReplyParser().parse_reply(email.read()))
 
     def test_email_one_is_not_on(self):
         with open('test/emails/email_one_is_not_on.txt') as email:
             self.assertTrue(
-                "On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser.parse_reply(email.read()))
+                "On Oct 1, 2012, at 11:55 PM, Dave Tapley wrote:" not in EmailReplyParser().parse_reply(email.read()))
 
     def test_partial_quote_header(self):
         message = self.get_email('email_partial_quote_header')
@@ -194,7 +194,7 @@ class EmailMessageTest(unittest.TestCase):
         """
         with open('test/emails/%s.txt' % name) as f:
             text = f.read()
-        return EmailReplyParser.read(text)
+        return EmailReplyParser().read(text)
 
 
 if __name__ == '__main__':
