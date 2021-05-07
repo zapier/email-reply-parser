@@ -32,7 +32,8 @@ class EmailReplyParser(object):
             text - A string email body
             Returns reply body message
         """
-        return self.read(text).reply
+        a = self.read(text).reply
+        return a
 
 
 class EmailMessage(object):
@@ -51,6 +52,7 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = None
         self.MULTI_QUOTE_HDR_REGEX = None
         self.MULTI_QUOTE_HDR_REGEX_MULTILINE = None
+        self.WARNING_REGEX = None
         self.words_map = words_map
         self.language = language
         self.default_language = 'en'
@@ -62,7 +64,7 @@ class EmailMessage(object):
             r'^[* ]*(' + self.words_map[self.language]['From']
             + '|' + self.words_map[self.language]['Sent']
             + '|' + self.words_map[self.language]['To']
-            + ')\s*:\** .+|.+(mailto:).+'
+            + ')\s*:\s*.*|.+(mailto:).+',
         )
 
     def warnings(self):
@@ -102,7 +104,7 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit[a-zA-Z0-9.:;<>()&@ -]*:)(Le\s(.+?)a écrit[a-zA-Z0-9.:;<>()&@ -]*:)'
 
     def en_support(self):
-        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^Sent from (\w+\s*){1,6})')
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^[Ss]ent from (\w+\s*){1,6})')
         self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote\s*:$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
@@ -132,8 +134,8 @@ class EmailMessage(object):
             self.default_quoted_header()
         else:
             self.SIG_REGEX = re.compile(
-                r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from'] \
-                + '|' + self.words_map[self.default_language]['Sent from'] \
+                r'(--|__|-\w)|(^(' + self.words_map[self.language]['Sent from']
+                + '|' + self.words_map[self.default_language]['Sent from']
                 + ')(\w+\s*){1,3})'
             )
             self.QUOTE_HDR_REGEX = re.compile('.*' + self.words_map[self.language]['wrote'] + '\s?:$')
@@ -190,11 +192,11 @@ class EmailMessage(object):
         is_quote_header = self.QUOTE_HDR_REGEX.match(line) is not None
         is_quoted = self.QUOTED_REGEX.match(line) is not None
         is_header = is_quote_header or self.HEADER_REGEX.match(line) is not None
-        if self.fragment and self.SIG_REGEX.match(line.strip()):
+
+        if self.fragment and self.SIG_REGEX.match(self.fragment.lines[-1].strip()):
             self.fragment.signature = True
-            self.fragment.lines.append(line)
             self._finish_fragment()
-        elif self.fragment \
+        if self.fragment \
                 and ((self.fragment.headers == is_header and self.fragment.quoted == is_quoted) or
                      (self.fragment.quoted and (is_quote_header or len(line.strip()) == 0))):
             self.fragment.lines.append(line)
