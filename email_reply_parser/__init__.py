@@ -43,7 +43,7 @@ class EmailMessage(object):
     def __init__(self, text, language, words_map):
         self.fragments = []
         self.fragment = None
-        self.text = text.replace('\r\n', '\n')
+        self.text = text.replace('\r\n', '\n').replace('\r', '\n')
         self.found_visible = False
         self.SIG_REGEX = None
         self.QUOTE_HDR_REGEX = None
