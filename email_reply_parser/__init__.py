@@ -104,7 +104,7 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit[a-zA-Z0-9.:;<>()&@ -]*:)(Le\s(.+?)a écrit[a-zA-Z0-9.:;<>()&@ -]*:)'
 
     def en_support(self):
-        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^[Ss]ent from (\w+\s*){1,6})')
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^([Ss]ent from|[Gg]et [Oo]utlook)\s(\w+\s*){1,6})')
         self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote\s*:$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
