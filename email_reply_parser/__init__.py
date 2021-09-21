@@ -69,16 +69,25 @@ class EmailMessage(object):
 
     def warnings(self):
         self.WARNING_REGEX = re.compile(
-            r'(CAUTION:|NOTICE:|Confidentiality Notice:|Please do not reply|This electronic mail'
-            r'|Disclaimer: This message is intended'
-            r'|This message and any attachments are solely'
-            r'|This email contains privileged information'
-            r'|The information contained|This email has been scanned|This message and any associated files'
-            r'|This email and any files transmitted|This message is for the recipients'
-            r'|The information provided within this communication'
-            r'|This message (including any attachments) is intended'
-            r'|The [cC]ontents are confidential|This communication with its contents'
-            r'|Please consider the environment before printing this email) [a-zA-Z0-9:;.,?!()@&/\'\"\“\” \-]*'
+            r'(CAUTION:|NOTICE:|Disclaimer:|Confidentiality Notice:|Please do not reply|This electronic mail'
+            r'|The information contained'
+            r'|The information (provided|transmitted|contained)? (with)?in this (e[\-]?mail|message|communication)'
+            r'|This electronic (e[\-]?mail|message|communication) (including attachments) may contain confidential'
+            r'|This (e[\-]?mail|message|communication) is confidential'
+            r'|The content[s]? of this (e[\-]?mail|message|communication)'
+            r'|This (e[\-]?mail|message|communication) may contain'
+            r'|This (e[\-]?mail|message|communication) and (any)? files transmitted'
+            r'|This (e[\-]?mail|message|communication) and (any)? attachments'
+            r'|This (e[\-]?mail|message|communication) and (any)? associated files'
+            r'|This (e[\-]?mail|message|communication) (including any attachments)'
+            r'|This (e[\-]?mail|message|communication) contains privileged'
+            r'|This (e[\-]?mail|message|communication) is for the recipients'
+            r'|This (e[\-]?mail|message|communication) has been scanned'
+            r'|This (e[\-]?mail|message|communication) with its contents'
+            r'|If you have received this (e[\-]?mail|message|communication) in error'
+            r'|The [cC]ontents are confidential'
+            r'|Please consider the environment before printing this (e[\-]?mail|message|communication)) [a-zA-Z0-9:;.,?!()@&/\'\"\“\” \-]*',
+            re.IGNORECASE
         )
 
     def nl_support(self):
