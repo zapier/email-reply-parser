@@ -1,5 +1,28 @@
 # Email Reply Parser for Python
-A port of GitHub's Email Reply Parser library, by the fine folks at [Zapier](https://zapier.com/).
+A port of GitHub's Email Reply Parser library, by the fine folks at [Zapier](https://zapier.com/), with added language support.
+
+Currently supported languages:
+
+Arabic
+German
+English
+Spanish
+Finnish
+French
+Hebrew
+Indonesian
+Italian
+Japanese
+Korean
+Dutch
+Polish
+Portuguese
+Russian
+Slovak
+Thai
+Turkish
+Vietnamese
+Chinese
 
 ## Summary
 
@@ -45,7 +68,8 @@ from email_reply_parser import EmailReplyParser
 Step 2: Provide email message as type String
 
 ```python
-EmailReplyParser.read(email_message)
+parser = EmailReplyParser(language='en')
+parser.read(email_message)
 ```
 
 ### How to only retrieve the reply message
@@ -59,7 +83,6 @@ from email_reply_parser import EmailReplyParser
 Step 2: Provide email message as type string using parse_reply class method.
 
 ```python
+parser = EmailReplyParser(language='en')
 EmailReplyParser.parse_reply(email_message)
 ```
-
-
