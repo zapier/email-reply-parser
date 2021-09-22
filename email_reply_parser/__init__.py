@@ -68,25 +68,28 @@ class EmailMessage(object):
         )
 
     def warnings(self):
+        dot = '\u200b'
+        single_space = f'[ {dot}\xA0\t]'
+        space = f'[,()]?{single_space}{{0,3}}[\n\r]?{single_space}{{0,3}}[,()]?'
+        confidential_variations = f'(privileged|confidential|private|sensitive|{space}(/|and|or|and{space}/{space}or|,){space}){{1,3}}'
+        message_variations = f'(electronic|e[\-]?mail|message|communication|transmission|{space}){{1,3}}'
+        message_variations = f'(electronic|e[\-]?mail|message|communication|transmission|{space}){{1,3}}'
         self.WARNING_REGEX = re.compile(
-            r'(CAUTION:|NOTICE:|Disclaimer:|Confidentiality Notice:|Please do not reply|This electronic mail'
-            r'|The information contained'
-            r'|The information (provided|transmitted|contained)? (with)?in this (e[\-]?mail|message|communication)'
-            r'|This electronic (e[\-]?mail|message|communication) \(including( | \n)attachments\) may contain confidential'
-            r'|This (e[\-]?mail|message|communication) is confidential'
-            r'|The content[s]? of this (e[\-]?mail|message|communication)'
-            r'|This (e[\-]?mail|message|communication) may contain'
-            r'|This (e[\-]?mail|message|communication) and (any)? files transmitted'
-            r'|This (e[\-]?mail|message|communication) and (any)? attachments'
-            r'|This (e[\-]?mail|message|communication) and (any)? associated files'
-            r'|This (e[\-]?mail|message|communication) (including any attachments)'
-            r'|This (e[\-]?mail|message|communication) contains privileged'
-            r'|This (e[\-]?mail|message|communication) is for the recipients'
-            r'|This (e[\-]?mail|message|communication) has been scanned'
-            r'|This (e[\-]?mail|message|communication) with its contents'
-            r'|If you have received this (e[\-]?mail|message|communication) in error'
-            r'|The [cC]ontents are confidential'
-            r'|Please consider the environment before printing this (e[\-]?mail|message|communication)) ([a-zA-Z0-9:;.,?!()@&/\'\"\“\” \t\-]|(?<!\n)\n)*',
+            f'(CAUTION:|NOTICE:|Disclaimer:|Warning:|{confidential_variations}{space}Notice:|Please{space}do{space}not{space}reply'
+            f'|{confidential_variations}{space}information'
+            f'|(The|This){space}information{space}(provided|transmitted|contained)?{space}(with)?in{space}this{space}{message_variations}'
+            f'|(The|This){space}information{space}(may also be|is){space}legally'
+            f'|(The|This){space}content[s]?{space}of{space}this{space}{message_variations}'
+            f'|(The|This){space}{message_variations}{space}'
+            f'(may{space}contain|(and|or|and{space}/{space}or)?{space}(any|all)?{space}(files{space}transmitted|the{space}information{space}(contained|it{space}contains)|attach|associated)'
+            f'|[(]?including{space}(any|all)?{space}attachments[)]?|(is|are|contains){space}{confidential_variations}'
+            f'|is{space}for{space}the{space}recipients|is{space}intended{space}only|has{space}been{space}scanned|with{space}its{space}contents)'
+            f'|(The|This){space}publication,{space}copying'
+            f'|(The|This){space}sender{space}(cannot{space}guarantee|believes{space}that{space}this{space}{message_variations})'
+            f'|If{space}you{space}have{space}received{space}this{space}{message_variations}{space}in{space}error'
+            f'|The{space}contents{space}are{space}{confidential_variations}'
+            f'|(Under|According to){space}(the)?{space}(General{space}Data{space}Protection{space}Regulation|GDPR)'
+            f'|Please{space}consider{space}the{space}environment{space}before{space}printing{space}this{space}{message_variations})([a-zA-Z0-9:;.,?!<>()@&/\'\"\“\” {dot}\xA0\t\-]|(?<!\n)\n)*',
             re.IGNORECASE
         )
 
