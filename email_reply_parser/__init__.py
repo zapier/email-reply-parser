@@ -72,7 +72,7 @@ class EmailMessage(object):
             r'(CAUTION:|NOTICE:|Disclaimer:|Confidentiality Notice:|Please do not reply|This electronic mail'
             r'|The information contained'
             r'|The information (provided|transmitted|contained)? (with)?in this (e[\-]?mail|message|communication)'
-            r'|This electronic (e[\-]?mail|message|communication) (including attachments) may contain confidential'
+            r'|This electronic (e[\-]?mail|message|communication) \(including( | \n)attachments\) may contain confidential'
             r'|This (e[\-]?mail|message|communication) is confidential'
             r'|The content[s]? of this (e[\-]?mail|message|communication)'
             r'|This (e[\-]?mail|message|communication) may contain'
@@ -86,7 +86,7 @@ class EmailMessage(object):
             r'|This (e[\-]?mail|message|communication) with its contents'
             r'|If you have received this (e[\-]?mail|message|communication) in error'
             r'|The [cC]ontents are confidential'
-            r'|Please consider the environment before printing this (e[\-]?mail|message|communication)) [a-zA-Z0-9:;.,?!()@&/\'\"\“\” \-]*',
+            r'|Please consider the environment before printing this (e[\-]?mail|message|communication)) ([a-zA-Z0-9:;.,?!()@&/\'\"\“\” \-]|(?<!\n)\n)*',
             re.IGNORECASE
         )
 
