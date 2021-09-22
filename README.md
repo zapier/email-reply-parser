@@ -80,7 +80,7 @@ Step 1: Import email reply parser package
 from email_reply_parser import EmailReplyParser
 ```
 
-Step 2: Provide email message as type string using parse_reply class method.
+Step 2: Provide email message as type string using parse_reply.
 
 ```python
 parser = EmailReplyParser(language='en')
