@@ -86,7 +86,7 @@ class EmailMessage(object):
             r'|This (e[\-]?mail|message|communication) with its contents'
             r'|If you have received this (e[\-]?mail|message|communication) in error'
             r'|The [cC]ontents are confidential'
-            r'|Please consider the environment before printing this (e[\-]?mail|message|communication)) ([a-zA-Z0-9:;.,?!()@&/\'\"\“\” \-]|(?<!\n)\n)*',
+            r'|Please consider the environment before printing this (e[\-]?mail|message|communication)) ([a-zA-Z0-9:;.,?!()@&/\'\"\“\” \t\-]|(?<!\n)\n)*',
             re.IGNORECASE
         )
 
