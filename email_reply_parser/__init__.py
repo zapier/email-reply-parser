@@ -90,6 +90,7 @@ class EmailMessage(object):
             f'|The{space}contents{space}are{space}{confidential_variations}'
             f'|(Under|According to){space}(the)?{space}(General{space}Data{space}Protection{space}Regulation|GDPR)'
             f'|Click{space}here{space}to'
+            f'|Emails{space}are{space}not{space}secure'
             f'|To make{space}sure{space}you{space}continue{space}to{space}receive'
             f'|Please{space}choose{space}one{space}of{space}the{space}options{space}below'
             f'|Please{space}consider{space}the{space}environment{space}before{space}printing{space}this{space}{message_variations}'
