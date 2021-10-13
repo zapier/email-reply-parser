@@ -107,8 +107,8 @@ class EmailMessage(object):
 
     def de_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
-        self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
+        self.QUOTE_HDR_REGEX = re.compile('[a-zA-Z]{2,5}.*schrieb.*:$')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*:)(Am\s(.+?)schrieb.*:)'
 
     def fr_support(self):
         self.SIG_REGEX = re.compile(
