@@ -73,7 +73,6 @@ class EmailMessage(object):
         space = f'[,()]?{single_space}{{0,3}}[\n\r]?{single_space}{{0,3}}[,()]?'
         confidential_variations = f'(privileged|confidential|private|sensitive|{space}(/|and|or|and{space}/{space}or|,){space}){{1,3}}'
         message_variations = f'(electronic|e[\-]?mail|message|communication|transmission|{space}){{1,3}}'
-        message_variations = f'(electronic|e[\-]?mail|message|communication|transmission|{space}){{1,3}}'
         self.WARNING_REGEX = re.compile(
             f'(CAUTION:|NOTICE:|Disclaimer:|Warning:|{confidential_variations}{space}Notice:|Please{space}do{space}not{space}reply'
             f'|{confidential_variations}{space}information'
@@ -94,7 +93,7 @@ class EmailMessage(object):
             f'|To make{space}sure{space}you{space}continue{space}to{space}receive'
             f'|Please{space}choose{space}one{space}of{space}the{space}options{space}below'
             f'|Please{space}consider{space}the{space}environment{space}before{space}printing{space}this{space}{message_variations}'
-            f')([a-zA-Z0-9:;.,?!<>()@&/\'\"\“\” {dot}\xA0\t\-]|(?<!\n)\n)*',
+            f')([a-zA-Z0-9:;.,?!<>()@&/\'\"\“\” {dot}\xA0\t\-]|(?<!\n))*',
             re.IGNORECASE
         )
 
