@@ -73,7 +73,6 @@ class EmailMessage(object):
         space = f'[,()]?{single_space}{{0,3}}[\n\r]?{single_space}{{0,3}}[,()]?'
         confidential_variations = f'(privileged|confidential|private|sensitive|{space}(/|and|or|and{space}/{space}or|,){space}){{1,3}}'
         message_variations = f'(electronic|e[\-]?mail|message|communication|transmission|{space}){{1,3}}'
-        message_variations = f'(electronic|e[\-]?mail|message|communication|transmission|{space}){{1,3}}'
         self.WARNING_REGEX = re.compile(
             f'(CAUTION:|NOTICE:|Disclaimer:|Warning:|{confidential_variations}{space}Notice:|Please{space}do{space}not{space}reply'
             f'|{confidential_variations}{space}information'
@@ -90,6 +89,7 @@ class EmailMessage(object):
             f'|The{space}contents{space}are{space}{confidential_variations}'
             f'|(Under|According to){space}(the)?{space}(General{space}Data{space}Protection{space}Regulation|GDPR)'
             f'|Click{space}here{space}to'
+            f'|Emails{space}are{space}not{space}secure'
             f'|To make{space}sure{space}you{space}continue{space}to{space}receive'
             f'|Please{space}choose{space}one{space}of{space}the{space}options{space}below'
             f'|Please{space}consider{space}the{space}environment{space}before{space}printing{space}this{space}{message_variations}'
@@ -106,8 +106,8 @@ class EmailMessage(object):
 
     def de_support(self):
         self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^' + self.words_map[self.language]['Sent from'] + '(\w+\s*){1,3})')
-        self.QUOTE_HDR_REGEX = re.compile('Am.*schrieb.*>:$')
-        self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*>:)(Am\s(.+?)schrieb.*>:)'
+        self.QUOTE_HDR_REGEX = re.compile('[a-zA-Z]{2,5}.*schrieb.*:$')
+        self._MULTI_QUOTE_HDR_REGEX = r'(?!Am.*Am\s.+?schrieb.*:)(Am\s(.+?)schrieb.*:)'
 
     def fr_support(self):
         self.SIG_REGEX = re.compile(
