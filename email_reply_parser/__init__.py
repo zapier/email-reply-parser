@@ -35,6 +35,11 @@ class EmailReplyParser(object):
         a = self.read(text).reply
         return a
 
+    def find_contacts(self, text):
+        """Provides a list of From To emails and the dates of these emails"""
+        contacts_dict = EmailContacts(text, self.language, self.words_map).contacts()
+        return contacts_dict
+
 
 class EmailMessage(object):
     """ An email message represents a parsed email body.
@@ -243,6 +248,33 @@ class EmailMessage(object):
                     self.found_visible = True
             self.fragments.append(self.fragment)
         self.fragment = None
+
+
+class EmailContacts(EmailMessage):
+
+    def contacts(self):
+        self.text = self.text.strip()
+        HEADER_BLOCK = re.compile(
+            r'('
+            + '[>* ]*' + self.words_map[self.language]['From'] + '[ ]*:(.*)\n'
+            + '[>* ]*(?:' + self.words_map[self.language]['Sent'] + '|Date)[ ]*:(.*)\n'
+            + '[>* ]*' + self.words_map[self.language]['To'] + '[ ]*:(.*)\n'
+            + ')'
+        )
+        EMAIL = re.compile(r'([a-zA-Z0-9_\-\.]+@[a-zA-Z0-9_\-\.]+\.[a-zA-Z]{2,5})')
+        headers = HEADER_BLOCK.findall(self.text)
+        json = []
+        for header in headers:
+            contact = {'from': '', 'to': '', 'date': ''}
+            from_email = EMAIL.search(header[1])
+            if from_email:
+                contact['from'] = from_email.groups()[0]
+            contact['date'] = header[2]
+            to_email = EMAIL.search(header[3])
+            if to_email:
+                contact['to'] = to_email.groups()[0]
+            json.append(contact)
+        return json
 
 
 class Fragment(object):
