@@ -35,6 +35,11 @@ class EmailReplyParser(object):
         a = self.read(text).reply
         return a
 
+    def find_contacts(self, text):
+        """Provides a list of From To emails and the dates of these emails"""
+        contacts_dict = EmailContacts(text, self.language, self.words_map).contacts()
+        return contacts_dict
+
 
 class EmailMessage(object):
     """ An email message represents a parsed email body.
@@ -82,8 +87,8 @@ class EmailMessage(object):
             f'|(The|This){space}{message_variations}{space}'
             f'(may{space}contain|(and|or|and{space}/{space}or)?{space}(any|all)?{space}(files{space}transmitted|the{space}information{space}(contained|it{space}contains)|attach|associated)'
             f'|[(]?including{space}(any|all)?{space}attachments[)]?|(is|are|contains){space}{confidential_variations}'
-            f'|is{space}for{space}the{space}recipients|is{space}intended{space}only|has{space}been{space}scanned|with{space}its{space}contents)'
-            f'|(The|This){space}publication,{space}copying'
+            f'|is{space}for{space}the{space}recipients|is{space}intended{space}only|is{space}for{space}the{space}sole{space}user|has{space}been{space}scanned|with{space}its{space}contents'
+            f')|(The|This){space}publication,{space}copying'
             f'|(The|This){space}sender{space}(cannot{space}guarantee|believes{space}that{space}this{space}{message_variations})'
             f'|If{space}you{space}have{space}received{space}this{space}{message_variations}{space}in{space}error'
             f'|The{space}contents{space}are{space}{confidential_variations}'
@@ -96,7 +101,7 @@ class EmailMessage(object):
             f'|To make{space}sure{space}you{space}continue{space}to{space}receive'
             f'|Please{space}choose{space}one{space}of{space}the{space}options{space}below'
             f'|Please{space}consider{space}the{space}environment{space}before{space}printing{space}this{space}{message_variations}'
-            f')([a-zA-Z0-9:;.,?!<>()@&/\'\"\“\” {dot}\xA0\t\-]|(?<!\n))*',
+            f')[a-zA-Z0-9:;.,?!<>()@&/\'\"\“\” {dot}\xA0\t\-]*',
             re.IGNORECASE
         )
 
@@ -246,6 +251,33 @@ class EmailMessage(object):
                     self.found_visible = True
             self.fragments.append(self.fragment)
         self.fragment = None
+
+
+class EmailContacts(EmailMessage):
+
+    def contacts(self):
+        self.text = self.text.strip()
+        HEADER_BLOCK = re.compile(
+            r'('
+            + '[>* ]*' + self.words_map[self.language]['From'] + '[ ]*:(.*)\n'
+            + '[>* ]*(?:' + self.words_map[self.language]['Sent'] + '|Date)[ ]*:(.*)\n'
+            + '[>* ]*' + self.words_map[self.language]['To'] + '[ ]*:(.*)\n'
+            + ')'
+        )
+        EMAIL = re.compile(r'([a-zA-Z0-9_\-\.]+@[a-zA-Z0-9_\-\.]+\.[a-zA-Z]{2,5})')
+        headers = HEADER_BLOCK.findall(self.text)
+        json = []
+        for header in headers:
+            contact = {'from': '', 'to': '', 'date': ''}
+            from_email = EMAIL.search(header[1])
+            if from_email:
+                contact['from'] = from_email.groups()[0]
+            contact['date'] = header[2]
+            to_email = EMAIL.search(header[3])
+            if to_email:
+                contact['to'] = to_email.groups()[0]
+            json.append(contact)
+        return json
 
 
 class Fragment(object):
