@@ -101,7 +101,8 @@ class EmailMessage(object):
             f'|{sentence_start}Emails{space}are{space}not{space}secure'
             f'|{sentence_start}To make{space}sure{space}you{space}continue{space}to{space}receive'
             f'|{sentence_start}Please{space}choose{space}one{space}of{space}the{space}options{space}below'
-            f'|{sentence_start}Please{space}consider{space}the{space}environment{space}before{space}printing{space}this{space}{message_variations}'            
+            f'|{sentence_start}Please{space}consider{space}the{space}environment{space}before{space}printing{space}this{space}{message_variations}'
+            f'|{sentence_start}This{space}e-mail{space}and{space}any{space}attachments{space}are{space}confidential'
             f')[a-zA-Z0-9:;.,?!<>()@&/\'\"\“\” {dot}\xA0\t\-]*',
             re.IGNORECASE
         )
@@ -129,7 +130,7 @@ class EmailMessage(object):
         self._MULTI_QUOTE_HDR_REGEX = r'(?!Le.*Le\s.+?a écrit[a-zA-Z0-9.:;<>()&@ -]*:)(Le\s(.+?)a écrit[a-zA-Z0-9.:;<>()&@ -]*:)'
 
     def en_support(self):
-        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^(sent from|get outlook)\s(\w+\s*){1,6})|(Best regards|Thanks,|Thank you,|Best,|All the best|regards,)', flags=re.IGNORECASE)
+        self.SIG_REGEX = re.compile(r'(--|__|-\w)|(^(sent from|get outlook)\s(\w+\s*){1,6})|(Best regards|Kind Regards|Thanks,|Thank you,|Best,|All the best|regards,)', flags=re.IGNORECASE)
         self.QUOTE_HDR_REGEX = re.compile('\s*On.*wrote\s*:$')
         self.QUOTED_REGEX = re.compile(r'(>+)|((&gt;)+)')
         self._MULTI_QUOTE_HDR_REGEX = r'(?!On.*On\s.+?wrote\s*:)(On\s(.+?)wrote\s*:)'
