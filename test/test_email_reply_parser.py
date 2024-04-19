@@ -339,5 +339,16 @@ class EmailMessageTest(unittest.TestCase):
         assert body_second_message.startswith("Beste,")
         assert body_second_message.endswith("Timmy")
 
+
+    def test_parse_greek_email_headers(self):
+        """
+        Tests that we're parsing the 'On Jan 31 X wrote:' correctly in Polish. We test 5 different types that appear
+        """
+        message = self.get_email('email_greek_1')
+        body = EmailReplyParser.cut_off_at_signature(message.text, include=True)
+        assert body.startswith("Αγαπητή Περσεφόνη")
+        assert body.endswith("Από τον Άδη")
+
+
 if __name__ == '__main__':
     unittest.main()

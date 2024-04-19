@@ -84,7 +84,8 @@ class EmailMessage(object):
         r"|(^Obtener Outlook .{,50}$)"  # Spanish
         r"|(^Trimis de pe .{,50}$)"  # Romanian
         r"|(^Skickat från .{,50}$)"  # Swedish
-        r"|(^Skickat fran .{,50}$)",  # Swedish
+        r"|(^Skickat fran .{,50}$)"  # Swedish
+        r"|(^Στάλθηκε από .{,50}$)", # Greek
         flags=re.MULTILINE
     )
 
@@ -112,10 +113,13 @@ class EmailMessage(object):
         r"|Le.*ecrit(.*?):$"  # French
         r"|El.*escribio(.*?):$"  # Spanish
         r"|El.*escribió(.*?):$"  # Spanish
+        r"|En.*escribio(.*?):$"  # Spanish
+        r"|En.*escribió(.*?):$"  # Spanish
         r"|Dna.*napisal\(a\)(.*?):$"  # Slovak
         r"|po.*napisal\(a\)(.*?):$"  # Slovak
         r"|Dnia.*napisal\(a\)(.*?):$"  # Polish
         r"|Dnia.*napisał\(a\)(.*?):$"  # Polish
+        r"|Στις.*έγραψε(.*?):$"  # Greek
     )
 
     QUOTED_REGEX = re.compile(r"(>+)")
@@ -130,6 +134,9 @@ class EmailMessage(object):
         r"|Lahettaja|Paivays|Vastaanottaja|Aihe|Lähetetty"  # Finnish
         r"|Fra|Sendt|Til|Emne|Dato"  # Danish
         r"|Obtenir|Telechargez|Envoye|De"  # French
+        r"|Από το|Αποστολή|Προς|Θέμα"  # Greek
+        r"|De la|Început|La|Subiect"  # Romanian
+        r"|De|Enviado|A|Asunto"  # Spanish
         r"|De|Enviado|Para|Assunto|Data):\*?"  # Portuguese
     )
     _MULTI_QUOTE_HDR_REGEX = (
@@ -166,6 +173,7 @@ class EmailMessage(object):
         r"|Wiadomość napisana (.{,120})\n?(.{,50})?o godz" # Polish
         r"|Wiadomosc napisana (.{,120})\n?(.{,50})?o godz" # Polish
         r"|Temat: (.{,120})\n?(.{,50})?Adresat:" # Polish
+        r"Στις (.{,120})\n?(.{,50})?έγραψε(\s+)?:"  # Greek
         r")"
     )
     MULTI_QUOTE_HDR_REGEX = re.compile(_MULTI_QUOTE_HDR_REGEX)
