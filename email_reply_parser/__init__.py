@@ -100,6 +100,7 @@ class EmailMessage(object):
         r"|Am.*schrieb(.*?):$"  # German
         r"|Von.*gesendet(.*?)"  # German
         r"|.*[>|;] schrieb.*[0-9]{2}:[0-9]{2}:"  # German
+        r"|Ende der Kundennachricht"  # German
         r"|ma.*kirjoitti(.*?):$"  # Finnish
         r"|ti.*kirjoitti(.*?):$"  # Finnish
         r"|pe.*kirjoitti(.*?):$"  # Finnish
@@ -154,6 +155,9 @@ class EmailMessage(object):
         r"|tors (.{,120})\n?(.{,50})?skrev(\s+):"  # Norwegian
         r"|ons (.{,120})\n?(.{,50})?skrev(\s+):"  # Norwegian
         r"|Am (.{,120})\n?(.{,50})?schrieb(\s+)?::"  # German
+        r"|Am (.{,120})schrieb(.{,50})?(\s+)?(:)?"  # German
+        r"|(.{,50})?schrieb(.{,120})(\s+)?(:)?"  # German
+        r"|(-{,10})(\s*)?(Ursprüngliche|Original|Forwarded).?(Nachricht|Message)(\s*)?(-{,10})" #German/English
         r"|ma (.{,120})\n?(.{,50})?kirjoitti(\s+)?:"  # Finnish
         r"|ti (.{,120})\n?(.{,50})?kirjoitti(\s+)?:"  # Finnish
         r"|pe (.{,120})\n?(.{,50})?kirjoitti(\s+)?:"  # Finnish
@@ -167,8 +171,8 @@ class EmailMessage(object):
         r"|No dia (.{,120})\n?(.{,50})?escreveu(\s+)?:"  # Portuguese
         r"|El (.{,120})\n?(.{,50})?escribio(\s+)?:"  # Spanish
         r"|El (.{,120})\n?(.{,50})?escribió(\s+)?:"  # Spanish
-        r"|Le (.{,120})\n?(.{,50})?ecrit(\s+)?:"  # French
-        r"|Le (.{,120})\n?(.{,50})?écrit(\s+)?:"  # French
+        r"|Le (.{,120})\n?(.{,50})?ecrit(\s+)?(:)?"  # French
+        r"|Le (.{,120})\n?(.{,50})?écrit(\s+)?(:)?"  # French
         r"|Dna (.{,120})\n?(.{,50})?napisala\(a\)(\s+)?:"  # Slovak
         r"|po (.{,120})\n?(.{,50})?napisal\(a\)(\s+)?:"  # Slovak
         r"|Dnia (.{,120})\n?(.{,50})?napisal\(a\)(\s+)?:" # Polish
@@ -188,6 +192,7 @@ class EmailMessage(object):
         r"cordialement|très cordialement|bien cordialement|bien a vous|merci d'avance|d'avance merci|"
         r"Vielen Dank|Vielen Dank und LG|Herzliche Grusse|grussen\s?|grusse\s?|liebe Grusse\s?|"
         r"vielen dank im voraus|Mit freundlichen grussen|"
+        r"Mit freundlichen grüßen|Freundliche Grüße|"
         r"saluti|Cordiali saluti|Distinti saluti|buona giornata|cordialmente|"
         r"o zi buna|o zi buna va urez|cu respect|cu stima|cu bine|toate cele bune|"
         r"saludos cordiales|atentamente|un saludo)(.{0,20})(,|\n))|"

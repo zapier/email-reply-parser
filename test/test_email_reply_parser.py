@@ -350,5 +350,35 @@ class EmailMessageTest(unittest.TestCase):
         assert body_second_message.startswith("Beste,")
         assert body_second_message.endswith("Timmy")
 
+    def test_french_sign_off(self):
+        """
+        Tests that we're parsing the 'On Jan 31 X wrote:' correctly in french.
+        """
+
+        message = self.get_email('french_signoff')
+        body = EmailReplyParser.cut_off_at_signature(message.text, include=True)
+        assert body.endswith('Il est signalé site innaxecible')
+
+    def test_german_sign_off(self):
+        """
+        Tests that we're parsing the 'On Jan 31 X wrote:' correctly in german.
+        """
+
+        first_message = self.get_email('german_signoff')
+        second_message = self.get_email('german_signoff_2')
+        body_first_message = EmailReplyParser.cut_off_at_signature(first_message.text, include=True)
+        body_second_message = EmailReplyParser.cut_off_at_signature(second_message.text, include=True)
+        assert body_first_message.endswith('Mit freundlichen Grüßen')
+        assert body_second_message.endswith('Freundliche Grüße')
+
+    def test_orginal_message_sign_off(self):
+        """
+        Tests that we're parsing the ---- Original Message ---- correctly in german.
+        """
+        message = self.get_email('original_message_german')
+        body = EmailReplyParser.cut_off_at_signature(message.text, include=True)
+        assert body.endswith('Mit freundlichen Grüßen')
+
+
 if __name__ == '__main__':
     unittest.main()
