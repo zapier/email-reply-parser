@@ -65,7 +65,7 @@ class EmailMessage(object):
 
         # Fix any outlook style replies, with the reply immediately above the signature boundary line
         #   See email_2_2.txt for an example
-        self.text = re.sub('([^\n])(?=\n ?[_-]{7,})', '\\1\n', self.text, re.MULTILINE)
+        self.text = re.sub('([^\n])(?=\n ?[_-]{7,})', '\\1\n', self.text)
 
         self.lines = self.text.split('\n')
         self.lines.reverse()
